@@ -21,6 +21,8 @@ from azure.ai.ml.constants import AssetTypes
 import json
 
 from llmops.common.logger import llmops_logger
+from azure.identity import AzureAuthorityHosts
+
 logger = llmops_logger("register_data_asset")
 
 parser = argparse.ArgumentParser("register data assets")
@@ -55,16 +57,18 @@ for obj in config["envs"]:
         break
 
 data_config_path = f"{args.flow_to_execute}/configs/data_config.json"
-resource_group_name = model_config["RESOURCE_GROUP_NAME"]
+
 workspace_name = model_config["WORKSPACE_NAME"]
 data_purpose = args.data_purpose
 
 
+kwargs = {"cloud": "AzureUSGovernment"}
 ml_client = MLClient(
-    DefaultAzureCredential(),
+    DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_US_GOVERNMENT),
     args.subscription_id,
     resource_group_name,
-    workspace_name
+    workspace_name,
+    **kwargs
 )
 
 config_file = open(data_config_path)
