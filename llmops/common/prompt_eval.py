@@ -24,7 +24,7 @@ import os
 import time
 import yaml
 import pandas as pd
-from azure.identity import DefaultAzureCredential
+from azure.identity import DefaultAzureCredential, AzureAuthorityHosts
 from promptflow.entities import Run
 from promptflow.azure import PFClient
 
@@ -70,12 +70,13 @@ def prepare_and_execute(
     experiment_name = f"{flow_to_execute}_{stage}"
 
     eval_flows = eval_flow_path.split(",")
-
+    kwargs = {"cloud": "AzureUSGovernment"}
     pf = PFClient(
-        DefaultAzureCredential(),
+        DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
         subscription_id,
         resource_group_name,
-        workspace_name
+        workspace_name,
+        **kwargs
     )
 
     standard_flow = f"{flow_to_execute}/{standard_flow_path}"

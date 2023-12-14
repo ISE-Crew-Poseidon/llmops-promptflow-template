@@ -108,10 +108,11 @@ def prepare_and_execute(
     )
 
     pf = PFClient(
-        DefaultAzureCredential(),
+        DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
         subscription_id,
         resource_group_name,
-        workspace_name
+        workspace_name,
+        **kwargs
     )
     logger.info(data_mapping_config)
     flow = f"{flow_to_execute}/{standard_flow_path}"
