@@ -64,7 +64,7 @@ data_purpose = args.data_purpose
 
 kwargs = {"cloud": "AzureUSGovernment"}
 ml_client = MLClient(
-    DefaultAzureCredential(authority=AzureAuthorityHosts.AzureGovernment),
+    DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
     args.subscription_id,
     resource_group_name,
     workspace_name,
