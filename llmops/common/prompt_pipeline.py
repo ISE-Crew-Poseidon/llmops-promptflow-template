@@ -222,7 +222,8 @@ def prepare_and_execute(
 
                         pipeline_job = pf.runs.create_or_update(
                             run,
-                            stream=True
+                            stream=True,
+                            environment_variables={"AZUREML_CLOUD_ENV_NAME": "AzureUSGovernment"}
                             )
 
                         run_ids.append(pipeline_job.name)
@@ -266,7 +267,7 @@ def prepare_and_execute(
                     },
             )
             run._experiment_name = experiment_name
-            pipeline_job = pf.runs.create_or_update(run, stream=True)
+            pipeline_job = pf.runs.create_or_update(run, stream=True, environment_variables={"AZUREML_CLOUD_ENV_NAME": "AzureUSGovernment"})
             run_ids.append(pipeline_job.name)
             time.sleep(15)
             df_result = None
