@@ -35,6 +35,7 @@ from azure.identity import DefaultAzureCredential
 from azure.ai.ml import MLClient
 from promptflow.entities import Run
 from promptflow.azure import PFClient
+from azure.identity import AzureAuthorityHosts
 
 from llmops.common.logger import llmops_logger
 
@@ -97,11 +98,13 @@ def prepare_and_execute(
     runtime = config["RUNTIME_NAME"]
     experiment_name = f"{flow_to_execute}_{stage}"
 
+    kwargs = {"cloud": "AzureUSGovernment"}
     ml_client = MLClient(
-        DefaultAzureCredential(),
+        DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
         subscription_id,
         resource_group_name,
-        workspace_name
+        workspace_name,
+        **kwargs
     )
 
     pf = PFClient(

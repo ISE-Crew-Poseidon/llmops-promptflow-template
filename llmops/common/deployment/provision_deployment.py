@@ -28,6 +28,7 @@ from azure.ai.ml.entities import (
     OnlineRequestSettings,
 )
 from azure.identity import DefaultAzureCredential
+from azure.identity import AzureAuthorityHosts
 
 from llmops.common.logger import llmops_logger
 logger = llmops_logger("provision_deployment")

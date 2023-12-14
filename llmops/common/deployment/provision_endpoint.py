@@ -20,7 +20,7 @@ import argparse
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import ManagedOnlineEndpoint
 from azure.identity import DefaultAzureCredential
-
+from azure.identity import AzureAuthorityHosts
 
 parser = argparse.ArgumentParser("provision_endpoints")
 parser.add_argument(

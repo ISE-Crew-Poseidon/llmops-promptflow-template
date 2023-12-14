@@ -16,7 +16,7 @@ import json
 from azure.ai.ml import MLClient
 
 from azure.identity import DefaultAzureCredential
-
+from azure.identity import AzureAuthorityHosts
 from llmops.common.logger import llmops_logger
 logger = llmops_logger("test_model_on_kubernetes")
 
@@ -60,11 +60,13 @@ resource_group_name = config["RESOURCE_GROUP_NAME"]
 workspace_name = config["WORKSPACE_NAME"]
 real_config = f"{flow_to_execute}/configs/deployment_config.json"
 
+kwargs = {"cloud": "AzureUSGovernment"}
 ml_client = MLClient(
-    DefaultAzureCredential(),
+    DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
     args.subscription_id,
     resource_group_name,
-    workspace_name
+    workspace_name,
+    **kwargs
 )
 
 config_file = open(real_config)
