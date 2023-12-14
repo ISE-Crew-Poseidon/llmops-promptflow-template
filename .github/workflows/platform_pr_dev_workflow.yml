@@ -16,7 +16,9 @@ on:
         description: "service principal auth to Azure"
         required: true
 
-
+env:
+  AZUREML_CLOUD_ENV_NAME: "AzureUSGovernment"
+  
 jobs:
   pr_code_validation:
     name: Build Validation
