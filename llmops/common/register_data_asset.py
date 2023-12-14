@@ -57,7 +57,7 @@ for obj in config["envs"]:
         break
 
 data_config_path = f"{args.flow_to_execute}/configs/data_config.json"
-
+resource_group_name = model_config["RESOURCE_GROUP_NAME"]
 workspace_name = model_config["WORKSPACE_NAME"]
 data_purpose = args.data_purpose
 
