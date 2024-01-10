@@ -3,18 +3,18 @@
             {
                 "ENV_NAME": "pr",
                 "RUNTIME_NAME": "",
-                "KEYVAULT_NAME": "ritvnetbkeyvault0347da26",
-                "RESOURCE_GROUP_NAME": "vnettest",
-                "WORKSPACE_NAME": "rit-vnet-bound",
+                "KEYVAULT_NAME": "d95a1a2873218-AML-KV",
+                "RESOURCE_GROUP_NAME": "mlops-RG-DL",
+                "WORKSPACE_NAME": "mlops-AML-WS",
                 "STANDARD_FLOW_PATH": "flows/standard",
                 "EVALUATION_FLOW_PATH": "flows/evaluation"
             },
             {
                 "ENV_NAME": "dev",
                 "RUNTIME_NAME": "",
-                "KEYVAULT_NAME": "ritvnetbkeyvault0347da26",
-                "RESOURCE_GROUP_NAME": "vnettest",
-                "WORKSPACE_NAME": "rit-vnet-bound",
+                "KEYVAULT_NAME": "d95a1a2873218-AML-KV",
+                "RESOURCE_GROUP_NAME": "mlops-RG-DL",
+                "WORKSPACE_NAME": "mlops-AML-WS",
                 "STANDARD_FLOW_PATH": "flows/standard",
                 "EVALUATION_FLOW_PATH": "flows/evaluation"
             },
