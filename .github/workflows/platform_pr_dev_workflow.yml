@@ -75,6 +75,8 @@ jobs:
         uses: ./.github/actions/execute_script
         env:
           Python_ROOT_DIR: ./myvenv
+          pythonLocation: ./myvenv
+          LD_LIBRARY_PATH: ./myvenv/lib
         with:
           step_name: "Execute prompt flow bulk run"
           script_parameter: |
