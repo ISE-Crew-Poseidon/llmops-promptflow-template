@@ -73,6 +73,8 @@ jobs:
       #=====================================
       - name: Execute prompt flow bulk run
         uses: ./.github/actions/execute_script
+        env:
+          Python_ROOT_DIR: ./myvenv
         with:
           step_name: "Execute prompt flow bulk run"
           script_parameter: |
