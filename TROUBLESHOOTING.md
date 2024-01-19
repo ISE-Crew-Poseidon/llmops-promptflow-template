@@ -98,7 +98,7 @@ Error: Process completed with exit code 1.
 ```
 
 ### Fix
-The authentication for the promptflow client has the value of "http://management.azure.com" hardcoded for creating an Authentication token. So the endpoint will be correctly pointed to US government, but the auth token created is for Azure Commercial leading to the 401 error. We created a virtual environment and manually changed the hard coded values to point to management.usgovcloudapi.net. TODO: Update to systematically point to correct environment based on env variable
+The authentication for the promptflow client has the value of "http://management.azure.com" hardcoded for creating an Authentication token. So the endpoint will be correctly pointed to US government, but the auth token created is for Azure Commercial leading to the 401 error. We created a virtual environment and manually changed the hard coded values to point to management.usgovcloudapi.net. TODO: Update to systematically point to correct environment based on env variable. The files that needed to be changed are `promptflow/azure/_restclient/flow_service_caller.py` and `promptflow/azure/operations/_run_operations.py`
 
 ### Automatic Runtime Error
 
@@ -222,3 +222,61 @@ mlflow.exceptions.MlflowException: API request to endpoint /api/2.0/mlflow/runs/
 ### Fix
 
 The issue is with authentication. The managed identity for the compute I am using does not have AzureML Data Scientist rights, add that role for the workspace and try again.
+
+### AOAI Connection Not Found
+
+The promptflow yaml files expect to have a connection setup in AML called AOAI. Currently when setting up a connection in the UI you must point to an OpenAI endpoint in the same environment. Since Azure OpenAI is currently only available in Azure Commercial you cannot create a connection via the UI
+
+### Fix
+
+Create the connection via the API. Sample code:
+
+```python
+import requests
+import json
+
+aoai_connection_name = "aoai_conn2"  # Change this to add a new connection
+subscription_id = SUBSCRIPTION_ID
+resource_group = RESOURCE_GROUP
+workspace_name = AML_WORKSPACE_NAME
+aoai_api_base = AOAI_CREDS.azure_openai_resource_endpoint
+aoai_api_key = AOAI_CREDS.azure_openai_api_key
+aoai_api_type = "azure"
+aoai_api_version = "2023-12-01-preview"
+
+url = (
+    f"https://management.usgovcloudapi.net/subscriptions/{subscription_id}/"
+    f"resourcegroups/{resource_group}/providers/Microsoft.MachineLearningServices/"
+    f"workspaces/{workspace_name}/connections/{aoai_connection_name}"
+    f"?api-version=2023-04-01-preview"
+)
+token = credential.get_token("https://management.usgovcloudapi.net/.default").token
+header = {
+    "Authorization": f"Bearer {token}",
+    "content-type": "application/json",
+}
+
+data = json.dumps(
+    {
+        "properties": {
+            "category": "AzureOpenAI",
+            "target": aoai_api_base,
+            "authType": "ApiKey",
+            "credentials": {
+                "key": aoai_api_key,
+            },
+            "metadata": {
+                "ApiType": aoai_api_type,
+                "ApiVersion": aoai_api_version,
+            },
+        }
+    }
+)
+
+with requests.Session() as session:
+    response = session.put(url, data=data, headers=header)
+    # Raise an exception if the response contains an HTTP error status code
+    response.raise_for_status()
+
+print(response.json())
+```
