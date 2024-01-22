@@ -47,5 +47,5 @@ nodes:
     question: ${inputs.math_question}
     examples: ${math_example.output}
   provider: AzureOpenAI
-  connection: aoai
+  connection: aoai_conn2
   api: chat
