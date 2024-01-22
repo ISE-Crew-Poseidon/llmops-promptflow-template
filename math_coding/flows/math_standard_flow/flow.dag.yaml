@@ -1,5 +1,6 @@
 $schema: https://azuremlschemas.azureedge.net/promptflow/latest/Flow.schema.json
 environment:
+  image: fauxdatamesh.azurecr.us/promptflow/promptflow-runtime-gov
   python_requirements_txt: requirements.txt
 inputs:
   math_question:

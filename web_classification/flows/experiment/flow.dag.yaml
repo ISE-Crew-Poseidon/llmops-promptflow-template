@@ -83,4 +83,5 @@ node_variants:
           module: promptflow.tools.aoai
     default_variant_id: variant_0
 environment:
+    image: fauxdatamesh.azurecr.us/promptflow/promptflow-runtime-gov
     python_requirements_txt: requirements.txt
