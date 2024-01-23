@@ -32,7 +32,7 @@ from azure.ai.ml.entities._deployment.resource_requirements_settings import (
 from azure.ai.ml.entities._deployment.container_resource_settings import (
     ResourceSettings,
 )
-from utils.get_clients import get_ml_client
+from llmops.common.utils.get_clients import get_ml_client
 from llmops.common.logger import llmops_logger
 logger = llmops_logger("kubernetes_deployment")
 

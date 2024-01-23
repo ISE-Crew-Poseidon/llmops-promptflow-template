@@ -12,7 +12,7 @@ AML workspace.
 
 from llmops.common.logger import llmops_logger
 import argparse
-from utils.get_clients import get_ml_client
+from llmops.common.utils.get_clients import get_ml_client
 logger = llmops_logger("get_workspace")
 
 

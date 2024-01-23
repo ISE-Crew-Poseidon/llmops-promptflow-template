@@ -32,7 +32,7 @@ import time
 import yaml
 import pandas as pd
 from promptflow.entities import Run
-from utils.get_clients import get_ml_client, get_pf_client
+from llmops.common.utils.get_clients import get_ml_client, get_pf_client
 
 from llmops.common.logger import llmops_logger
 

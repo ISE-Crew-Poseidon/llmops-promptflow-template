@@ -19,7 +19,7 @@ from azure.ai.ml.constants import AssetTypes
 import json
 
 from llmops.common.logger import llmops_logger
-from utils.get_clients import get_ml_client
+from llmops.common.utils.get_clients import get_ml_client
 
 logger = llmops_logger("register_data_asset")
 

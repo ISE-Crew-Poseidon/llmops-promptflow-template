@@ -14,7 +14,7 @@ deployment environment (dev, test, prod).
 import argparse
 import json
 
-from utils.get_clients import get_ml_client
+from llmops.common.utils.get_clients import get_ml_client
 from llmops.common.logger import llmops_logger
 logger = llmops_logger("test_model_on_kubernetes")
 

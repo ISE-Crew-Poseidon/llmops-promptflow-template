@@ -19,7 +19,7 @@ This argument is required to specify the name of the flow for execution.
 import json
 import argparse
 from azure.ai.ml.entities import KubernetesOnlineEndpoint
-from utils.get_clients import get_ml_client
+from llmops.common.utils.get_clients import get_ml_client
 
 parser = argparse.ArgumentParser("provision_kubernetes_endpoints")
 parser.add_argument(

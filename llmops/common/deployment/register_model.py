@@ -20,7 +20,7 @@ import shutil
 import os
 import json
 from azure.ai.ml.entities import Model
-from utils.get_clients import get_ml_client
+from llmops.common.utils.get_clients import get_ml_client
 from llmops.common.logger import llmops_logger
 logger = llmops_logger("register_model")
 
