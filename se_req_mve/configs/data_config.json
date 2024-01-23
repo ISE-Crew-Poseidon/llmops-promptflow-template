@@ -1,0 +1,12 @@
+{
+    "datasets":[
+        {
+            "PROMPT_FLOW_CONFIG_NAME": "se_req_mve",
+            "ENV_NAME": "pr",
+            "DATA_PURPOSE": "pr_data",
+            "DATA_PATH":"data/sample_reqs.json",
+            "DATASET_NAME":"temp_dataset",
+            "DATASET_DESC":"this dataset is for pr validation only"
+        }
+    ]
+}

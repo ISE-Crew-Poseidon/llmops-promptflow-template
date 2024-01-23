@@ -1,0 +1,74 @@
+[
+  {
+    "id":"MS1472-286",
+    "text":"Criteria in table I shall be used in determining the type of control to be used on control panels.",
+    "r3":true,
+    "r7":false,
+    "r8":false,
+    "r9":false,
+    "r16":false,
+    "r18":false,
+    "r30":false,
+    "r31":false
+  },
+  {
+    "id":"MS1472-287",
+    "text":"In addition, 5.1.1 shall be consulted prior to control selection. Table II shows recommended controls in relation to control function and actuation force required.",
+    "r3":true,
+    "r7":true,
+    "r8":false,
+    "r9":false,
+    "r16":false,
+    "r18":false,
+    "r30":false,
+    "r31":false
+  },
+  {
+    "id":"MS1472-296",
+    "text":"The type of control selected and the location of the motion envelopes shall assure that suitably clothed and suitably equipped user personnel within the central 90 percent of the anticipated user population for body dimensions for three-dimensional design elements (such as crew workspace) are accommodated.",
+    "r3":false,
+    "r7":true,
+    "r8":false,
+    "r9":false,
+    "r16":false,
+    "r18":true,
+    "r30":false,
+    "r31":false
+  },
+  {
+    "id":"MS1472-297",
+    "text":"Fifth percentile strength values and 5th or 95th percentile physical dimension values shall be used for two-dimensional design elements (see figures 23, 22, and B.1).",
+    "r3":false,
+    "r7":false,
+    "r8":false,
+    "r9":false,
+    "r16":false,
+    "r18":true,
+    "r30":false,
+    "r31":false
+  },
+  {
+    "id":"MS1472-299",
+    "text":"Equipment design shall accommodate both right- and left-handed users when possible.",
+    "r3":false,
+    "r7":false,
+    "r8":true,
+    "r9":false,
+    "r16":false,
+    "r18":true,
+    "r30":false,
+    "r31":false
+  },
+  {
+    "id":"MS1472-301",
+    "text":"If constraints permit only one group of users (right- or left-handed) to be accommodated, the majority of the user population shall receive priority.",
+    "r3":false,
+    "r7":true,
+    "r8":false,
+    "r9":false,
+    "r16":false,
+    "r18":false,
+    "r30":false,
+    "r31":false
+  }
+]
