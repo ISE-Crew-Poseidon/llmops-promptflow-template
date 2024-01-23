@@ -34,5 +34,5 @@ nodes:
   inputs:
     entities_str: ${NER_LLM.output}
 environment:
-  image: fauxdatamesh.azurecr.us/promptflow/promptflow-runtime-gov
+  # image: fauxdatamesh.azurecr.us/promptflow/promptflow-runtime-gov
   python_requirements_txt: requirements.txt
