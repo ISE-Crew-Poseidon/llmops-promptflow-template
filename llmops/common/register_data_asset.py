@@ -13,15 +13,13 @@ This argument is required to specify the environment (dev, test, prod)
 for execution or deployment.
 """
 
-from azure.ai.ml import MLClient
-from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.entities import Data
 from azure.ai.ml.constants import AssetTypes
 import json
 
 from llmops.common.logger import llmops_logger
-from azure.identity import AzureAuthorityHosts
+from utils.get_clients import get_ml_client
 
 logger = llmops_logger("register_data_asset")
 
@@ -62,14 +60,7 @@ workspace_name = model_config["WORKSPACE_NAME"]
 data_purpose = args.data_purpose
 
 
-kwargs = {"cloud": "AzureUSGovernment"}
-ml_client = MLClient(
-    DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
-    args.subscription_id,
-    resource_group_name,
-    workspace_name,
-    **kwargs
-)
+ml_client = get_ml_client(args.subscription_id, resource_group_name, workspace_name)
 
 config_file = open(data_config_path)
 data_config = json.load(config_file)

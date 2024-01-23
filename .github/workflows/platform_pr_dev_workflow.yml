@@ -17,7 +17,7 @@ on:
         required: true
 
 env:
-  AZUREML_CLOUD_ENV_NAME: "AzureUSGovernment"
+  AZUREML_CURRENT_CLOUD: "AzureUSGovernment"
   
 jobs:
   pr_code_validation:

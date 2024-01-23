@@ -18,10 +18,8 @@ This argument is required to specify the name of the flow for execution.
 
 import json
 import argparse
-from azure.ai.ml import MLClient
 from azure.ai.ml.entities import KubernetesOnlineEndpoint
-from azure.identity import DefaultAzureCredential
-from azure.identity import AzureAuthorityHosts
+from utils.get_clients import get_ml_client
 
 parser = argparse.ArgumentParser("provision_kubernetes_endpoints")
 parser.add_argument(
@@ -72,14 +70,8 @@ resource_group_name = config["RESOURCE_GROUP_NAME"]
 workspace_name = config["WORKSPACE_NAME"]
 real_config = f"{flow_to_execute}/configs/deployment_config.json"
 
-kwargs = {"cloud": "AzureUSGovernment"}
-ml_client = MLClient(
-    DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
-    args.subscription_id,
-    resource_group_name,
-    workspace_name,
-    **kwargs
-)
+ml_client = get_ml_client(args.subscription_id, resource_group_name, workspace_name)
+
 
 config_file = open(real_config)
 endpoint_config = json.load(config_file)

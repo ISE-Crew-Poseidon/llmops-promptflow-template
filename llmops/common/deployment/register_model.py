@@ -19,10 +19,8 @@ import argparse
 import shutil
 import os
 import json
-from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Model
-from azure.identity import DefaultAzureCredential
-from azure.identity import AzureAuthorityHosts
+from utils.get_clients import get_ml_client
 from llmops.common.logger import llmops_logger
 logger = llmops_logger("register_model")
 
@@ -89,14 +87,7 @@ if os.path.exists(f"{flow_to_execute}/flow.dag.yaml"):
     destination_path = os.path.join(os.getcwd(), model_path, file_to_replace)
     shutil.copy(source_path, destination_path)
 
-kwargs = {"cloud": "AzureUSGovernment"}
-ml_client = MLClient(
-    DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
-    args.subscription_id,
-    resource_group_name,
-    workspace_name,
-    **kwargs
-)
+ml_client = get_ml_client(args.subscription_id, resource_group_name, workspace_name)
 
 model = Model(
     name=model_name,

@@ -24,9 +24,8 @@ import os
 import time
 import yaml
 import pandas as pd
-from azure.identity import DefaultAzureCredential, AzureAuthorityHosts
 from promptflow.entities import Run
-from promptflow.azure import PFClient
+from utils.get_clients import get_pf_client
 
 from llmops.common.logger import llmops_logger
 
@@ -70,14 +69,7 @@ def prepare_and_execute(
     experiment_name = f"{flow_to_execute}_{stage}"
 
     eval_flows = eval_flow_path.split(",")
-    kwargs = {"cloud": "AzureUSGovernment"}
-    pf = PFClient(
-        DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT),
-        subscription_id,
-        resource_group_name,
-        workspace_name,
-        **kwargs
-    )
+    pf = get_pf_client(subscription_id, resource_group_name, workspace_name)
 
     standard_flow = f"{flow_to_execute}/{standard_flow_path}"
     dataset_name = []
