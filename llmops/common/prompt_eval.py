@@ -152,7 +152,9 @@ def prepare_and_execute(
             df_result = None
 
             time.sleep(15)
-
+            if eval_job.status == "NotStarted":
+                logger.info("Job didn't start in time, retry once")
+                eval_job = pf.runs.create_or_update(eval_run, stream=True)
             if eval_job.status == "Completed" or eval_job.status == "Finished":
                 logger.info(eval_job.status)
                 df_result = pf.get_details(eval_job)

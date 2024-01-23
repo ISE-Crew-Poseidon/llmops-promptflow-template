@@ -255,7 +255,11 @@ def prepare_and_execute(
             run_ids.append(pipeline_job.name)
             time.sleep(15)
             df_result = None
-
+            if (pipeline_job.status == "NotStarted"):
+                logger.info("job not started, will retry once")
+                pipeline_job = pf.runs.create_or_update(run, stream=True)
+                run_ids.append(pipeline_job.name)
+                time.sleep(15)
             if (pipeline_job.status == "Completed" or
                     pipeline_job.status == "Finished"):
 
