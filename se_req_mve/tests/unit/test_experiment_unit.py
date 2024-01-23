@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from src.features.experiment import process_flow
+from se_req_mve.features.experiment import process_flow
 
 
 @pytest.fixture

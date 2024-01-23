@@ -4,8 +4,8 @@ import shutil
 
 import pytest
 
-from src.features.experiment import run_experiment
-from src.services.aoai_client import get_credentials_aoai
+from se_req_mve.features.experiment import run_experiment
+from se_req_mve.services.aoai_client import get_credentials_aoai
 
 
 @pytest.fixture

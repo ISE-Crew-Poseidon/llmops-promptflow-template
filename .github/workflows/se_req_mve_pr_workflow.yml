@@ -1,4 +1,4 @@
-name: named_entity_recognition_pr_dev_pipeline
+name: se_req_mve_pr_dev_pipeline
 
 on:
   workflow_call:

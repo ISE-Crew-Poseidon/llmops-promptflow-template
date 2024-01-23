@@ -3,7 +3,7 @@
 import pytest
 from numpy import isclose
 
-from src.utils.metrics import average_metrics
+from se_req_mve.utils.metrics import average_metrics
 
 
 @pytest.fixture
