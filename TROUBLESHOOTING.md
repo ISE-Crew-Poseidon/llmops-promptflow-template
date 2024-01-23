@@ -12,7 +12,7 @@ Attempting Azure CLI login by using service principal with secret...
 Error: No subscriptions found for ***
 ```
 
-### Fix 
+##### Fix
 
 The github action for login assumes an environment of AzureCloud. To update the environment go to the azure login step in the workflow yaml and add the environment field as shown
 
@@ -32,7 +32,7 @@ Code: SubscriptionNotFound
 Message: The subscription '50ff9458-6372-4522-8227-327043deaef5' could not be found.
 ```
 
-### Fix
+#### Fix
 
 Update DefaultAzureCredential to include the authority `DefaultAzureCredential(authority=AzureAuthorityHosts.AZURE_GOVERNMENT)`, add kwargs to the MLClient creation to add cloud setting `{"cloud": "AzureUSGovernment"}`, and add environment variable `AZUREML_CLOUD_ENV_NAME: "AzureUSGovernment"`. The kwargs may not be necessary because it should be handled by the environment variable, but did both.
 
@@ -97,16 +97,16 @@ Message: Invalid token
 Error: Process completed with exit code 1.
 ```
 
-### Fix
-The authentication for the promptflow client has the value of "http://management.azure.com" hardcoded for creating an Authentication token. So the endpoint will be correctly pointed to US government, but the auth token created is for Azure Commercial leading to the 401 error. We created a virtual environment and manually changed the hard coded values to point to management.usgovcloudapi.net. TODO: Update to systematically point to correct environment based on env variable. The files that needed to be changed are `promptflow/azure/_restclient/flow_service_caller.py` and `promptflow/azure/operations/_run_operations.py`
+#### Fix
+<s> The authentication for the promptflow client has the value of "http://management.azure.com" hardcoded for creating an Authentication token. So the endpoint will be correctly pointed to US government, but the auth token created is for Azure Commercial leading to the 401 error. We created a virtual environment and manually changed the hard coded values to point to management.usgovcloudapi.net. </s> This has been fixed in Promptflow versions >1.4.0
 
 ### Automatic Runtime Error
 
 When running a job using an Automatic Runtime I received a CredentialNotFound error. This is because an automatic runtime does not assign a ManagedIdentity by default. There does not seem to be a way to assign an identity using the promptflow methods.
 
-### Fix
+#### Fix
 
-Creating a custom runtime gets around this error because you can assign a Managed Identity that has access to the workspace. When creating this it gets past the credential error and presents a SubscriptionNotFound error
+This has been fixed in later versions of the Promptflow Runtime. Try running version > 20240116.v1
 
 ### Managed Runtime Error
 
@@ -139,7 +139,7 @@ Code: SubscriptionNotFound
 Message: The subscription '50ff9458-6372-4522-8227-327043deaef5' could not be found.
 ```
 
-### Fix
+#### Fix
 
 The issue is that the credential is for Azure Gov, but the rest client found under MLClient is attempting to figure out which cloud it should point to and defaults to AzureCloud. When calling that cloud with a Gov subscription it fails. The fix is around the environment variable AZUREML_CURRENT_CLOUD. When you create the Custom Runtime you should add an environment variable of AZUREML_CURRENT_CLOUD=AzureUSGovernment. I found inconsistent results on updating an existing runtime so how I did it was on a managed compute instance, I created a custom application with these settings, please update to point to your environment
 
@@ -186,15 +186,16 @@ promptflow.runtime._errors.AzureStorageOperationError: Failed to upload run info
 
 What is happening is that the job is starting correctly and then when it attempts to update the status of the job it is using a hard coded AzureCloud endpoint which fails. This causes the job to fail, but it also means the status never updates on the job which is why it stays in the Not Started status
 
-### Fix
+#### Fix
 
-Looking inside the docker container you can find the promptflow runtime code at `/azureml-envs/prompt-flow/runtime/lib/python3.9/site-packages/promptflow/runtime/storage/azureml_run_storage_v2.py` which has the storage accout BlobServiceClient hardcoded to 
+<s> Looking inside the docker container you can find the promptflow runtime code at `/azureml-envs/prompt-flow/runtime/lib/python3.9/site-packages/promptflow/runtime/storage/azureml_run_storage_v2.py` which has the storage accout BlobServiceClient hardcoded to 
 
 ```python
 blob_url = f"https://{storage_account_name}.blob.core.windows.net"
 ```
 
-Log into the docker container with `docker exec -it <runtime> /bin/bash`. Then execute the following command `grep -rl 'blob.core.windows.net' /azureml-envs/prompt-flow/runtime/lib/python3.9/site-packages/promptflow/runtime/storage/| xargs sed -i 's/blob.core.windows.net/blob.core.usgovcloudapi.net/g'` TODO: find where this code is hosted and figure out a non-hard code solution.
+Log into the docker container with `docker exec -it <runtime> /bin/bash`. Then execute the following command `grep -rl 'blob.core.windows.net' /azureml-envs/prompt-flow/runtime/lib/python3.9/site-packages/promptflow/runtime/storage/| xargs sed -i 's/blob.core.windows.net/blob.core.usgovcloudapi.net/g'` </s> 
+This has been fixed in version 20240116.v1 of the Promptflow runtime
 
 ### 403 error in tracking mlflow
 
@@ -219,7 +220,7 @@ Traceback (most recent call last):
 mlflow.exceptions.MlflowException: API request to endpoint /api/2.0/mlflow/runs/update failed with error code 403 != 200. Response body: ''
 ```
 
-### Fix
+#### Fix
 
 The issue is with authentication. The managed identity for the compute I am using does not have AzureML Data Scientist rights, add that role for the workspace and try again.
 
@@ -227,7 +228,7 @@ The issue is with authentication. The managed identity for the compute I am usin
 
 The promptflow yaml files expect to have a connection setup in AML called AOAI. Currently when setting up a connection in the UI you must point to an OpenAI endpoint in the same environment. Since Azure OpenAI is currently only available in Azure Commercial you cannot create a connection via the UI
 
-### Fix
+#### Fix
 
 Create the connection via the API. Sample code:
 
