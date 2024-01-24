@@ -11,7 +11,7 @@ from dotenv import find_dotenv, load_dotenv
 from promptflow import PFClient
 from promptflow.entities import AzureOpenAIConnection
 
-from src.utils.logger import llmops_logger
+from se_req_mve.utils.logger import llmops_logger
 
 logger = llmops_logger()
 

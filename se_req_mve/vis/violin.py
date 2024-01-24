@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from src.utils.logger import llmops_logger
+from se_req_mve.utils.logger import llmops_logger
 
 logger = llmops_logger()
 

@@ -47,9 +47,3 @@
 #         print(output)
 
 #     assert mock_pf.test.call_count == 6
-def test_print():
-    try:
-        print("Hello") is None
-    except:
-        print("Test print function failed.")
-        assert False

@@ -1,4 +1,4 @@
-# """Test for src.features.utils.py"""
+# """Test for se_req_mve.features.utils.py"""
 
 # import pytest
 # from numpy import isclose
@@ -43,3 +43,9 @@
 #     assert all_metrics["confusion_matrix"] == ["[[6]]", "[[4]]", "[[2]]"]
 
 #     assert isclose(mean_metrics["recall"], (2 / 3))
+def test_print():
+    try:
+        print("Hello") is None
+    except:
+        print("Test print function failed.")
+        assert False

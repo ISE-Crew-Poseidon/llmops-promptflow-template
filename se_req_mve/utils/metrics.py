@@ -7,13 +7,13 @@ from typing import List
 import pandas as pd
 from numpy import mean, random, std
 
-from src.utils.logger import llmops_logger
+from se_req_mve.utils.logger import llmops_logger
 
 logger = llmops_logger()
 
 
 def average_metrics(all_metrics_list: List):
-    """Reformats metrics collected from src.features.Replicate objects
+    """Reformats metrics collected from se_req_mve.features.Replicate objects
     into Dict[str, List] from List[Dict].  Also produces mean_metrics.
     """
     all_metrics = {k: [d[k] for d in all_metrics_list] for k in all_metrics_list[0]}

@@ -10,7 +10,7 @@ from sklearn.metrics import (
     recall_score,
 )
 
-from src.utils.logger import llmops_logger
+from se_req_mve.utils.logger import llmops_logger
 
 logger = llmops_logger()
 
