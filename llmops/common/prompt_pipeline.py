@@ -215,6 +215,32 @@ def prepare_and_execute(
                         time.sleep(15)
                         if (pipeline_job.status == "NotStarted"):
                             logger.info("job not started, will retry once")
+                            run = Run(
+                            flow=flow,
+                            data=data_id,
+                            # runtime=runtime,
+                            # un-comment the resources line and
+                            # comment the argument runtime to
+                            # enable automatic runtime.
+                            # Reference: COMPUTE_RUNTIME
+                            resources={"instance_type": "Standard_E4ds_v4"},
+                            variant=variant_string,
+                            name=(
+                                f"{experiment_name}_{variant_id}"
+                                f"_{timestamp}_{data_ref}"
+                                ),
+                            display_name=(
+                                f"{experiment_name}_{variant_id}"
+                                f"_{timestamp}_{data_ref}"
+                            ),
+                            environment_variables={
+                                "key1": "value1"
+                                },
+                            column_mapping=exp_config_node,
+                            tags={
+                                "build_id": build_id
+                                },
+                            )
                             pipeline_job = pf.runs.create_or_update(run, stream=True)
                             run_ids.append(pipeline_job.name)
                             time.sleep(15)
@@ -262,6 +288,26 @@ def prepare_and_execute(
             df_result = None
             if (pipeline_job.status == "NotStarted"):
                 logger.info("job not started, will retry once")
+                run = Run(
+                flow=flow,
+                data=data_id,
+                # runtime=runtime,
+                # un-comment the resources line and
+                # comment the argument runtime to
+                # enable automatic runtime.
+                # Reference: COMPUTE_RUNTIME
+                resources={"instance_type": "Standard_E4ds_v4"},
+                name=f"{experiment_name}_{timestamp}_{data_ref}",
+                display_name=f"{experiment_name}_{timestamp}_{data_ref}",
+                environment_variables={
+                    "key1": "value1"
+                    },
+                column_mapping=exp_config_node,
+                tags={
+                    "build_id": build_id
+                    },
+                )
+                run._experiment_name = experiment_name
                 pipeline_job = pf.runs.create_or_update(run, stream=True)
                 run_ids.append(pipeline_job.name)
                 time.sleep(15)
