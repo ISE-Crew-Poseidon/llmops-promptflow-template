@@ -3,8 +3,8 @@ import json
 import time as t
 from datetime import datetime
 
-from se_req_mve.services.aoai_client import CredentialsAOAI, get_promptflow_client
-from se_req_mve.utils.logger import llmops_logger
+from services.aoai_client import CredentialsAOAI, get_promptflow_client
+from utils.logger import llmops_logger
 
 from .evaluation import calculate_metrics, sanitize_prediction
 from .experiment_output import ExperimentOutput, Replicate

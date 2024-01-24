@@ -7,7 +7,7 @@ from typing import List
 import pandas as pd
 from numpy import mean, random, std
 
-from se_req_mve.utils.logger import llmops_logger
+from utils.logger import llmops_logger
 
 logger = llmops_logger()
 
