@@ -14,7 +14,7 @@ inputs:
     default: r16
   data_file:
     type: string
-    default: ../../../data/processed/incose_rules.json
+    default: incose_rules.json
 outputs:
   output:
     type: string

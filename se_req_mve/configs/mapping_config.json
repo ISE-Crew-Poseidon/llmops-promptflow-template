@@ -1,8 +1,7 @@
 {
     "experiment": {
-        "text": "${data.text}", 
-        "entity_type": "${data.entity_type}"
-    },
+        "query": "${data.text}"
+        },
     "evaluation": {
         "evaluation": {
             "ground_truth": "${data.results}",
