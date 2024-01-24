@@ -1,11 +1,13 @@
 {
     "experiment": {
-        "query": "${data.text}"
+        "query": "${data.text}",
+        "truth": "${data.r18}",
+        "rule_id": "r18"
         },
     "evaluation": {
         "evaluation": {
-            "ground_truth": "${data.results}",
-            "entities": "${run.outputs.entities}"
+            "truth": "${data.r18}",
+            "prediction": "${run.outputs.violation}"
         }
     }
 
