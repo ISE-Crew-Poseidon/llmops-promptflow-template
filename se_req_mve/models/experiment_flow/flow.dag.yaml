@@ -16,9 +16,9 @@ inputs:
     type: string
     default: incose_rules.json
 outputs:
-  output:
-    type: string
-    reference: ${convert_to_dict.output}
+  violation:
+    type: bool
+    reference: ${convert_to_dict.output.violation}
 nodes:
 - name: prepare_rule
   type: python
