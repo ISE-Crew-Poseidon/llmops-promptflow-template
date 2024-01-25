@@ -145,7 +145,6 @@ def prepare_and_execute(
     past_runs = []
     all_eval_df = []
     all_eval_metrics = []
-    rules = []
 
     for data_id in dataset_name:
         data_ref = data_id.replace("azureml:", "")
