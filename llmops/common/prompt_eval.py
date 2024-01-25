@@ -236,6 +236,9 @@ def prepare_and_execute(
     with open(f"reports/{experiment_name}_metrics.html", "w") as f_metrics:
         f_metrics.write(html_table_metrics)
 
+# Define a custom argument type for a list of strings
+def list_of_strings(arg):
+    return arg.split(',')
 
 def main():
     """
@@ -279,6 +282,12 @@ def main():
         "--flow_to_execute", type=str, help="flow use case name", required=True
     )
 
+    parser.add_argument(
+        "--rules",
+        help="List of rules for MVE experiment",
+        required=False,
+        type=list_of_strings,
+    )
     args = parser.parse_args()
 
     prepare_and_execute(
@@ -288,6 +297,7 @@ def main():
         args.run_id,
         args.data_purpose,
         args.flow_to_execute,
+        args.rules,
     )
 
 

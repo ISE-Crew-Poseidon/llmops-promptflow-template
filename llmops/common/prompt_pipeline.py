@@ -64,7 +64,7 @@ def prepare_and_execute(
     data_purpose,
     save_output,
     save_metric,
-    rules=["r3", "r7", "r8", "r9", "r16", "r18", "r30", "r31"], # Used to send a list of rules to run 
+    rules, # Used to send a list of rules to run 
 ):
     """
     Run the experimentation loop by executing standard flows.
@@ -340,6 +340,10 @@ def prepare_and_execute(
         logger.info("Saved the metrics in files in reports folder")
 
 
+# Define a custom argument type for a list of strings
+def list_of_strings(arg):
+    return arg.split(',')
+
 def main():
     """
     Run experimentation loop by executing standard Prompt Flows.
@@ -396,6 +400,12 @@ def main():
         required=False,
         action="store_true",
     )
+    parser.add_argument(
+        "--rules",
+        help="List of rules for MVE experiment",
+        required=False,
+        type=list_of_strings,
+    )
     args = parser.parse_args()
 
     prepare_and_execute(
@@ -407,6 +417,7 @@ def main():
         args.data_purpose,
         args.save_output,
         args.save_metric,
+        args.rules,
     )
 
 

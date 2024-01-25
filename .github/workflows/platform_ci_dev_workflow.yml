@@ -85,7 +85,8 @@ jobs:
             --flow_to_execute ${{ inputs.flow_type }} \
             --env_name ${{ inputs.env_name }} \
             --data_purpose "training_data" \
-            --output_file run_id.txt
+            --output_file run_id.txt \
+            --rules r3,r7,r8,r9,r16,r18,r30,r31
 
       #=====================================
       # Reads run_id.txt file. Assigns it to variable RUN_NAME
@@ -135,7 +136,8 @@ jobs:
             --flow_to_execute ${{ inputs.flow_type }} \
             --env_name ${{ inputs.env_name }} \
             --data_purpose "test_data" \
-            --run_id "$RUN_NAME"
+            --run_id "$RUN_NAME" \
+            --rules r3,r7,r8,r9,r16,r18,r30,r31
 
       #=====================================
       # Published generated reports in csv and html format
