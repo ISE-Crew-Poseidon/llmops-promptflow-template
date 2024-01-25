@@ -14,15 +14,15 @@
             "DATA_PURPOSE": "test_data",
             "DATA_PATH":"data/requirements_v1.json",
             "DATASET_NAME":"se_req_mve_test",
-            "RELATED_EXP_DATASET": "se_req_mve_train",
+            "RELATED_EXP_DATASET": "se_req_mve_full_300",
             "DATASET_DESC":"this dataset is for evaluating flows"
         },
         {
             "PROMPT_FLOW_CONFIG_NAME": "se_req_mve",
             "ENV_NAME": "dev",
             "DATA_PURPOSE": "training_data",
-            "DATA_PATH":"data/sample_reqs.json",
-            "DATASET_NAME":"se_req_mve_train",
+            "DATA_PATH":"data/requirements_v1.json",
+            "DATASET_NAME":"se_req_mve_full_300",
             "DATASET_DESC":"this dataset is for prompt experiments"
         }
     ]

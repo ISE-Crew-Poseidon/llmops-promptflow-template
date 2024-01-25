@@ -281,3 +281,11 @@ with requests.Session() as session:
 
 print(response.json())
 ```
+
+### NotStarted Error on Created Runtime
+When the promptflow runtime issues were solved I was still getting an issue where on runtimes created by the Service Principal I was unable to get a run to start. Since I did not have terminal access to the compute I was unable to see anything other than UserError.
+
+#### Fix
+I created a new Compute instance with SSH access, this allowed me to log into the terminal remotely. The flag for this is under az ml compute create is `--ssh-public-access-enabled true` and `--ssh-key-value` with a public key value. Once logged into the box do a `docker ps` to see the name of the runtime and run `docker logs -f <runtime name>` to follow the logs of your runtime.
+
+Once doing this I discovered the issues was the Managed Identity of the runtime did not have Storage Blob Data Contributor access to the Storage Account that backed the Azure ML Workspace. Once adding that role the jobs started successfully.
