@@ -7,7 +7,7 @@
                 "RESOURCE_GROUP_NAME": "ngc-eng-reqs-mve",
                 "WORKSPACE_NAME": "ngcengreqsmve",
                 "STANDARD_FLOW_PATH": "models/experiment_flow",
-                "EVALUATION_FLOW_PATH": "flows/evaluation"
+                "EVALUATION_FLOW_PATH": "models/evaluation"
             },
             {
                 "ENV_NAME": "dev",
@@ -16,7 +16,7 @@
                 "RESOURCE_GROUP_NAME": "ngc-eng-reqs-mve",
                 "WORKSPACE_NAME": "ngcengreqsmve",
                 "STANDARD_FLOW_PATH": "models/experiment_flow",
-                "EVALUATION_FLOW_PATH": "flows/evaluation"
+                "EVALUATION_FLOW_PATH": "models/evaluation"
             },
             {
                 "ENV_NAME": "postprodeval",

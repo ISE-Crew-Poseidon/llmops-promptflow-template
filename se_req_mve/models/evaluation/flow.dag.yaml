@@ -1,0 +1,45 @@
+id: classification_recall_eval
+name: Classification Recall Evaluation
+inputs:
+  truth:
+    type: bool
+    default: true
+    description: Ground truth is a categorical variable {'yes', 'no'}
+    is_chat_input: false
+  prediction:
+    type: string
+    default: yes
+    description: Predicted rule compliance to requirement statement(s).
+    is_chat_input: false
+outputs:
+  correct:
+    type: double
+    reference: ${score.output}
+nodes:
+- name: sanitize_prediction
+  type: python
+  source:
+    type: code
+    path: sanitize_prediction.py
+  inputs:
+    prediction_str: ${inputs.prediction}
+  use_variants: false
+- name: score
+  type: python
+  source:
+    type: code
+    path: score.py
+  inputs:
+    prediction: ${sanitize_prediction.output}
+    truth: ${inputs.truth}
+  use_variants: false
+- name: calculate_metrics
+  type: python
+  source:
+    type: code
+    path: calculate_metrics.py
+  inputs:
+    predictions: ${sanitize_prediction.output}
+    truth: ${inputs.truth}
+  aggregation: true
+  use_variants: false
