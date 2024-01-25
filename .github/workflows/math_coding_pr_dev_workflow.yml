@@ -16,7 +16,7 @@ on:
   pull_request:
     branches:
       - main
-      - development
+      # - development
     paths:
       - '.github/**'
       - 'llmops/**'
