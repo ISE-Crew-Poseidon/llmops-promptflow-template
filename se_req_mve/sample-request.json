@@ -1,3 +1,12 @@
 {
-    "text": "Maxime is a data scientist at Auto Dataset, and his wife is a finance manager in the same company.", "entity_type": "job title"
-}
+    "id":"MS1472-296",
+    "text":"The type of control selected and the location of the motion envelopes shall assure that suitably clothed and suitably equipped user personnel within the central 90 percent of the anticipated user population for body dimensions for three-dimensional design elements (such as crew workspace) are accommodated.",
+    "r3":false,
+    "r7":true,
+    "r8":false,
+    "r9":false,
+    "r16":false,
+    "r18":true,
+    "r30":false,
+    "r31":false
+  }
