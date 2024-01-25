@@ -1,0 +1,8 @@
+name: evaluation_template
+display_name: evaluation_${variant_id}_${timestamp} # supported macros: ${variant_id},${timestamp},${run}
+flow: /workspaces/se-req-exp/src/models/evaluation
+data: /workspaces/se-req-exp/src/models/evaluation/sample_eval_input.json
+#run: <Uncomment to select a run input>
+column_mapping:
+  truth: ${data.truth}
+  prediction: ${data.prediction}

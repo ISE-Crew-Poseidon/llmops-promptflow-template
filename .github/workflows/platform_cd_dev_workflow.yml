@@ -35,6 +35,9 @@ on:
         description: "Determine managed(False) or kubernetes(True) deployment"
         required: true
 
+env:
+  AZUREML_CURRENT_CLOUD: "AzureUSGovernment"
+  
 jobs:
   flow-deployment:
     name: prompt flow deployment job

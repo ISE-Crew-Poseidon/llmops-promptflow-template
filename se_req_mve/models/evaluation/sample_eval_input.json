@@ -1,0 +1,18 @@
+[
+    {
+        "truth": true,
+        "prediction": "yes"
+    },
+    {
+        "truth": false,
+        "prediction": "yes"
+    },
+    {
+        "truth": false,
+        "prediction": "no"
+    },
+    {
+        "truth": true,
+        "prediction": "no"
+    }
+]
