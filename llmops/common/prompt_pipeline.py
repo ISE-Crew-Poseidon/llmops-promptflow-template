@@ -101,6 +101,7 @@ def prepare_and_execute(
     pf = get_pf_client(subscription_id, resource_group_name, workspace_name)
 
     logger.info(data_mapping_config)
+    logger.info(rules)
     flow = f"{flow_to_execute}/{standard_flow_path}"
     dataset_name = []
     config_file = open(data_config_path)
