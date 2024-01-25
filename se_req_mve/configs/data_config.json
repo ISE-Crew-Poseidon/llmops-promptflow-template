@@ -5,8 +5,16 @@
             "ENV_NAME": "pr",
             "DATA_PURPOSE": "pr_data",
             "DATA_PATH":"data/sample_reqs.json",
-            "DATASET_NAME":"temp_dataset",
+            "DATASET_NAME":"se_req_mve_temp_dataset",
             "DATASET_DESC":"this dataset is for pr validation only"
+        },
+        {
+            "PROMPT_FLOW_CONFIG_NAME": "se_req_mve",
+            "ENV_NAME": "dev",
+            "DATA_PURPOSE": "test_data",
+            "DATA_PATH":"data/requirements_v1.json",
+            "DATASET_NAME":"se_req_mve_test",
+            "DATASET_DESC":"this dataset is for evaluating flows"
         }
     ]
 }
