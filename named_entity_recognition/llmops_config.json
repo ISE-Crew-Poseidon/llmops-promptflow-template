@@ -2,28 +2,28 @@
     "envs":[
             {
                 "ENV_NAME": "pr",
-                "RUNTIME_NAME": "",
-                "KEYVAULT_NAME": "ritvnetbkeyvault0347da26",
-                "RESOURCE_GROUP_NAME": "vnettest",
-                "WORKSPACE_NAME": "rit-vnet-bound",
+                "RUNTIME_NAME": "mc-runtime",
+                "KEYVAULT_NAME": "ngcengreqsmve",
+                "RESOURCE_GROUP_NAME": "ngc-eng-reqs-mve",
+                "WORKSPACE_NAME": "ngcengreqsmve",
                 "STANDARD_FLOW_PATH": "flows/standard",
                 "EVALUATION_FLOW_PATH": "flows/evaluation"
             },
             {
                 "ENV_NAME": "dev",
-                "RUNTIME_NAME": "",
-                "KEYVAULT_NAME": "ritvnetbkeyvault0347da26",
-                "RESOURCE_GROUP_NAME": "vnettest",
-                "WORKSPACE_NAME": "rit-vnet-bound",
+                "RUNTIME_NAME": "mc-runtime",
+                "KEYVAULT_NAME": "ngcengreqsmve",
+                "RESOURCE_GROUP_NAME": "ngc-eng-reqs-mve",
+                "WORKSPACE_NAME": "ngcengreqsmve",
                 "STANDARD_FLOW_PATH": "flows/standard",
                 "EVALUATION_FLOW_PATH": "flows/evaluation"
             },
             {
                 "ENV_NAME": "postprodeval",
-                "RUNTIME_NAME": "",
-                "KEYVAULT_NAME": "ritvnetbkeyvault0347da26",
-                "RESOURCE_GROUP_NAME": "vnettest",
-                "WORKSPACE_NAME": "rit-vnet-bound",
+                "RUNTIME_NAME": "mc-runtime",
+                "KEYVAULT_NAME": "ngcengreqsmve",
+                "RESOURCE_GROUP_NAME": "vnngc-eng-reqs-mveettest",
+                "WORKSPACE_NAME": "ngcengreqsmve",
                 "STANDARD_FLOW_PATH": "flows/post-production-evaluation"
             }
     ]

@@ -24,9 +24,8 @@ import os
 import time
 import yaml
 import pandas as pd
-from azure.identity import DefaultAzureCredential
 from promptflow.entities import Run
-from promptflow.azure import PFClient
+from llmops.common.utils.get_clients import get_pf_client
 
 from llmops.common.logger import llmops_logger
 
@@ -70,13 +69,7 @@ def prepare_and_execute(
     experiment_name = f"{flow_to_execute}_{stage}"
 
     eval_flows = eval_flow_path.split(",")
-
-    pf = PFClient(
-        DefaultAzureCredential(),
-        subscription_id,
-        resource_group_name,
-        workspace_name
-    )
+    pf = get_pf_client(subscription_id, resource_group_name, workspace_name)
 
     standard_flow = f"{flow_to_execute}/{standard_flow_path}"
     dataset_name = []
@@ -144,7 +137,7 @@ def prepare_and_execute(
                 data=data_id,
                 run=my_run,
                 column_mapping=mapping_node,
-                #runtime=runtime,
+                # runtime=runtime,
                 # un-comment the resources line and
                 # comment the argument runtime to
                 # enable automatic runtime.
@@ -159,7 +152,9 @@ def prepare_and_execute(
             df_result = None
 
             time.sleep(15)
-
+            if eval_job.status == "NotStarted":
+                logger.info("Job didn't start in time, retry once")
+                eval_job = pf.runs.create_or_update(eval_run, stream=True)
             if eval_job.status == "Completed" or eval_job.status == "Finished":
                 logger.info(eval_job.status)
                 df_result = pf.get_details(eval_job)

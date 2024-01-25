@@ -1,0 +1,47 @@
+[
+    {
+        "obj_num": "1.1.1",
+        "text": "The ring-bearer should be accompanied by a set of individuals experienced in hand-to-hand or magical combat.",
+        "r16": true,
+        "r18": false, 
+        "violation": false 
+    },
+    {
+        "obj_num": "1.1.2",
+        "text": "The ring-bearer should be accompanied by an individual familiar with the route to Mordor.",
+        "r16": false,
+        "r18": true, 
+        "violation": true  
+    },
+    {
+        "obj_num": "1.1.3",
+        "text": "The fellowship should wield at least one sword, one bow, and one axe",
+        "r16": true,
+        "r18": false, 
+        "violation": false 
+    },
+    {
+        "obj_num": "1.3",
+        "text": "The fellowship should have two breakfasts a day.",
+        "r16": false,
+        "r18": true, 
+        "violation": true 
+ 
+    },
+    {
+        "obj_num": "2.1.1",
+        "text": "The fellowship should carry basic survival gear to survive harsh environmental conditions.",
+        "r16": false,
+        "r18": true, 
+        "violation": true 
+ 
+    },
+    {
+        "obj_num": "2.2.1",
+        "text": "The fellowship should limit their consumption of Elven lempas bread.",
+        "r16": false,
+        "r18": true, 
+        "violation": true 
+ 
+    }
+]

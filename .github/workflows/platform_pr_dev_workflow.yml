@@ -16,7 +16,9 @@ on:
         description: "service principal auth to Azure"
         required: true
 
-
+env:
+  AZUREML_CURRENT_CLOUD: "AzureUSGovernment"
+  
 jobs:
   pr_code_validation:
     name: Build Validation
@@ -35,6 +37,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.azure_credentials }}
+          environment: 'AzureUSGovernment'
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
       - name: load the current Azure subscription details

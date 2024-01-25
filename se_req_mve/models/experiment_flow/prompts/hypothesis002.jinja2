@@ -1,0 +1,18 @@
+system:
+Your task is to classify if the given text violates a rule: yes or no. The violation check will be based on the provided text.
+
+user:
+The selection range of the value of "violation" must be "yes", "no". Please provide the output in JSON format with the keys "violation". Only respond with a JSON output.
+
+Here are a few examples:
+{% for ex in examples %}
+TEXT: {{ex.requirement}}
+OUTPUT: {{ex.violation}}
+{% endfor %}
+
+Here is the rule that the input must follow:
+{{rule_definition}}
+
+Only respond with a JSON output. For the given text content, classify if the text violates the above rule:
+TEXT: {{requirement}}
+OUTPUT:

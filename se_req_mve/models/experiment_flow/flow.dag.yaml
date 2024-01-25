@@ -1,0 +1,78 @@
+$schema: https://azuremlschemas.azureedge.net/promptflow/latest/Flow.schema.json
+environment:
+  python_requirements_txt: requirements.txt
+inputs:
+  query:
+    type: string
+    default: Multirotation controls shall be used when precision is required over a
+      wide range of adjustment.
+  truth:
+    type: bool
+    default: false
+  rule_id:
+    type: string
+    default: r16
+  data_file:
+    type: string
+    default: incose_rules.json
+outputs:
+  output:
+    type: string
+    reference: ${convert_to_dict.output}
+nodes:
+- name: prepare_rule
+  type: python
+  source:
+    type: code
+    path: prepare_rule.py
+  inputs:
+    rule_id: ${inputs.rule_id}
+    data_file: ${inputs.data_file}
+- name: classify_with_llm
+  use_variants: true
+- name: convert_to_dict
+  type: python
+  source:
+    type: code
+    path: convert_to_dict.py
+  inputs:
+    input_str: ${classify_with_llm.output}
+  use_variants: false
+node_variants:
+  classify_with_llm:
+    default_variant_id: hypothesis001
+    variants:
+      hypothesis001:
+        node:
+          type: llm
+          source:
+            type: code
+            path: prompts/hypothesis001.jinja2
+          inputs:
+            deployment_name: gpt-35-turbo
+            rule: ${prepare_rule.output.definition}
+          connection: aoai_conn2
+          api: chat
+      hypothesis002:
+        node:
+          type: llm
+          source:
+            type: code
+            path: prompts/hypothesis002.jinja2
+          inputs:
+            deployment_name: gpt-35-turbo
+            rule_definition: ${prepare_rule.output.definition}
+            examples: ${prepare_rule.output.examples}
+          connection: aoai_conn2
+          api: chat
+      hypothesis003:
+        node:
+          type: llm
+          source:
+            type: code
+            path: prompts/hypothesis003.jinja2
+          inputs:
+            deployment_name: gpt-35-turbo
+            rule: ${prepare_rule.output.definition}
+          connection: aoai_conn2
+          api: chat

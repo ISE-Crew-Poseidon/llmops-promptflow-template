@@ -21,13 +21,12 @@ This argument is required to specify the name of the flow for execution.
 import json
 import argparse
 
-from azure.ai.ml import MLClient
 from azure.ai.ml.entities import (
     ManagedOnlineDeployment,
     Environment,
     OnlineRequestSettings,
 )
-from azure.identity import DefaultAzureCredential
+from llmops.common.utils.get_clients import get_ml_client
 
 from llmops.common.logger import llmops_logger
 logger = llmops_logger("provision_deployment")
@@ -86,12 +85,7 @@ real_config = f"{flow_to_execute}/configs/deployment_config.json"
 
 logger.info(f"Model name: {model_name}")
 
-ml_client = MLClient(
-    DefaultAzureCredential(),
-    args.subscription_id,
-    resource_group_name,
-    workspace_name
-)
+ml_client = get_ml_client(args.subscription_id, resource_group_name, workspace_name)
 
 model = ml_client.models.get(model_name, model_version)
 

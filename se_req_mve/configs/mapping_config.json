@@ -1,0 +1,14 @@
+{
+    "experiment": {
+        "query": "${data.text}",
+        "truth": "${data.r18}",
+        "rule_id": "r18"
+        },
+    "evaluation": {
+        "evaluation": {
+            "truth": "${data.r18}",
+            "prediction": "${run.outputs.violation}"
+        }
+    }
+
+}

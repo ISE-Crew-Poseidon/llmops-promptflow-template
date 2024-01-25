@@ -9,11 +9,10 @@ AML workspace.
 --workspace_name: The AML workspace name.
 """
 
-from azure.ai.ml import MLClient
-from azure.identity import DefaultAzureCredential
+
 from llmops.common.logger import llmops_logger
 import argparse
-
+from llmops.common.utils.get_clients import get_ml_client
 logger = llmops_logger("get_workspace")
 
 
@@ -35,12 +34,8 @@ def get_workspace(subscription_id: str,
     """
     try:
         logger.info(f"Getting access to {workspace_name} workspace.")
-        client = MLClient(
-            DefaultAzureCredential(),
-            subscription_id=subscription_id,
-            resource_group_name=resource_group_name,
-            workspace_name=workspace_name,
-        )
+        ml_client = get_ml_client(subscription_id, resource_group_name, workspace_name)
+
 
         workspace = client.workspaces.get(workspace_name)
         logger.info(f"Reference to {workspace_name} has been obtained.")

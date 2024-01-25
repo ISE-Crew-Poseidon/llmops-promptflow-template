@@ -1,0 +1,149 @@
+[
+    {
+        "definition": "Ensure the subject and verb of the need or requirement statement are appropriate to the entity to which the statement refers.",
+        "elaboration": "Subject\nThe subject of a need or requirement statement must be appropriate to the entity to which the statement refers, as discussed in Section 1.7. Requirements referring to the:\n• business management level have the form \"The <business> shall …\";\n• business operations level have the form \"The <business unit> shall …\";\n• system level have the form \"The <SOI> shall …\";\n• subsystem level have the form \"The <subsystem> shall ...\"; and\n• system element level have the form \"The <system element> shall ...\". All these different structures (with the different subjects) shall be included in the catalog of agreed patterns (see R1 and Appendix C). As a general rule, sets of need statements and sets of requirement statements for a specific entity should only contain needs or requirements for that entity—that is:\n• a set of business management requirements would contain only business management needs or requirements,\n• a set of business operations requirements would contain only business operations needs or requirements,\n• a set of system requirements would contain only needs or requirements that apply to the integrated system,\n• a set of subsystem requirements would contain only needs or requirements that apply to that subsystem, and\n• a set of system element requirements would contain only needs or requirements that apply to that system element. In some cases, however, a higher-level entity may wish to prescribe needs and requirements that apply to a lower-level entity. For example, it may be important for a business to mandate that the new aircraft under development must use a particular engine (perhaps for support reasons) in which case they may make a statement at the business level that refers to an entity at the subsystem level. Therefore, any set of entity needs or requirements can state, for that entity, needs or requirements that refer to itself, as well a lower-level entity to which the need or requirement applies (when there is a valid reason to do so). When this is the case, the prescriptive allocated need or requirement is treated as a constraint on the lower-level entity. In these cases, the lower-level entity will then include an entity specific child requirement and trace that child requirement to its parent or source. The reason for doing so should be included in the rationale attribute for the need or requirement. To continue our aircraft example above, although many requirements at the business management level of the ACME Aircraft Company will begin with “The ACME Aircraft Company shall …”, the business may therefore wish to state at the business management level a requirement stating that all aircraft developed by the organization shall use an engine with specific characteristics. For a specific aircraft, child requirements will be written for the appropriate entity that implements the intent of the business management generic requirement. For the entity dealing with the engine specifically, the system level child requirement would begin “The Aircraft shall….”; and at the subsystem level the child requirement would begin “The Engine shall …” and trace back to the system level parent requirement, which, in turn, would trace back to the business management level constraint as the parent or source. When talking about a quality or physical characteristic of an entity, some tend to write the requirements on the characteristic rather than the entity that has that characteristic which is not consistent with this rule nor rule and R3. /\"The <entity characteristic> shall be <verb><value range>./\" While this may be appropriate for a design output, it is not appropriate for a design input. In accordance with this rule, the subject of the requirement should be the entity to which the requirement applies, and the characteristic should be the object. “The <entity> shall <verb><characteristic> <value range>.” Verb As with the subject, the verb of a need statement or requirement statement must be appropriate to the subject of the need or requirement for the entity it is stated. For needs, the verbs such as “support”, “process”, “handle”, “track”, “manage”, and “flag” may be appropriate. However, they are too vague for requirement statements which therefore may not be Unambiguous (C3) nor Verifiable/Validatable (C7). For example, at the business management level the use of a verb such as “safe”, may be acceptable if it is unambiguous at that level, decomposed at the lower levels, and is verifiable at those levels. When transforming these need statements into requirement statements the functions referenced by these verbs would be decomposed into specific functions the <SOI> can be verified to perform at stated performance levels and conditions of operations.",
+        "examples": 
+        [
+            {
+                "requirement": "The <SOI> shall display the Current_Time on the <Display Device> per <Display Standard xyz>.",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "The <SOI> shall display the Current_Time per <Display Standard xyz>.",
+                "violation": "{\"violation\":\"no\"}"
+            }
+        ],
+        "id": "r3",
+        "name": "appropriate subject-verb"
+    },
+    {
+        "definition": "Avoid the use of vague terms.",
+        "elaboration": "Vague terms can lead to ambiguous, unverifiable needs and requirements where the true intent is not being communicated. Avoid words that provide vague quantification, such as “some”, “any”, “allowable”, “several”, “many”, “a lot of”, “a few”, “almost always”, “very nearly”, “nearly”, “about”, “close to”, “almost”, and “approximate”, Avoid vague adjectives such as “ancillary”, \"relevant”, “routine”, “common”, “generic”, “significant”, “flexible”, “expandable”, “typical”, “sufficient”, “adequate”, “appropriate”, “efficient”, “effective”, “proficient”, “reasonable” and “customary.” Adverbs qualify actions in some way and are particularly troublesome if vague. Avoid vague adverbs, such as “usually”, “approximately”, “sufficiently”, and “typically”, which can lead to ambiguous, unverifiable requirements that do not reflect accurately the stakeholder expectations. As a general rule, words that end in “-ly” often result in ambiguity.",
+        "examples": [
+            {
+                "requirement": "The <SOI> shall usually be online.",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "The <SOI> shall have an Availability of greater than xx% over a period of greater than yyyy hours. ",
+                "violation": "{\"violation\":\"no\"}"
+            },
+            {
+                "requirement": "The Flight_Information_System shall display per <Display Standard xyz> the Tracking_Information for relevant aircraft within <xxxx seconds> of detection.",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "The Flight_Information_System shall display per <Display Standard xyz> the Tracking_Information of each Aircraft located less than or equal to 20 kilometers from the Airfield when in the Operations_Mode within <xxxx seconds> of detection. ",
+                "violation": "{\"violation\":\"no\"}"
+            }
+        ],
+        "exceptions": "R3 points out that the use of a verb such as “safe”, may be acceptable at the business management or operations level as long as it is unambiguous at that level, decomposed at the lower levels, and is verifiable at the level stated. Similarly, some vague adjectives may be allowable at the business management or operations level, providing they are not ambiguous at that level. NLP/AI tools providing automatic assessment of this rule shall be flexible enough and tailorable in order not to identify this issue as an error at a business level, while enforcing the absence of vague terms in other lower-level documents.",
+        "id": "r7",
+        "name": "vague terms"
+    },
+    {
+        "definition": "Avoid the inclusion of escape clauses that state vague conditions or possibilities, such as \"so far as is possible\", \"as little as possible\", \"where possible\", \"as much as possible\", \"if it should prove necessary\", \"if necessary\", \"to the extent necessary\", \"as appropriate\", \"as required\", \"to the extent practical\", and \"if practicable\".",
+        "elaboration": "Escape clauses give an excuse to the developer of the system at lower levels not to implement a need or requirement. From a contracting standpoint, needs or requirements with these phrases could therefore be interpreted as being optional even if communicated in a “shall” requirement statement. Escape clauses can lead to ambiguous needs that the SOI cannot be validated to meet and are open to interpretation and that do not reflect accurately lifecycle concepts, or other sources, from which they were transformed. Escape clauses can lead to ambiguous, unverifiable requirements that are open to interpretation and that do not reflect accurately the needs, source, or higher-level requirements from which they were transformed.",
+        "examples": [
+            {
+                "requirement": "The GPS shall, where there is sufficient space, display the User_Location in accordance with <Display Standard xyz>. ",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "The GPS shall display the User_Location in accordance with <Display Standard XYZ>.",
+                "violation": "{\"violation\":\"no\"}"
+            } 
+        ],
+        "id": "r8",
+        "name": "escape clauses"
+    },
+    {
+        "definition": "Avoid open-ended, non-specific clauses such as \"including but not limited to\", \"etc.\" and \"and so on\".",
+        "elaboration": "Open-ended clauses imply there is more required without stating exactly what. Open-ended clauses can lead to ambiguous, unverifiable needs and requirements that do not reflect accurately the stakeholder’s expectations and needs and can create ambiguity in the mind of the reader. Needs or requirements with open-ended clauses are not Complete (C4). Use of open-ended clauses also violates the one-thought rule (R18) that leads to the singular characteristic. If more cases are required, then include additional needs and requirements that explicitly state those cases. Depending on the contract type (fixed price versus level of effort or cost plus) open-ended requirements can lead to serious interpretation problems concerning what is in or out of scope of the contract; possibly resulting in expensive contract changes. For level of effort or cost-plus contracts, open-ended requirements can be used by the supplier to do and bill the customer for additional work not intended by the customer leading to budget overruns and expensive contract changes.",
+        "examples": [
+            {
+                "requirement": "The ATM shall display the Customer Account_Number, Account_Balance, and so on per <Display Standard xyz>. ",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "The ATM shall display the Customer Account_Number in accordance with <Display Standard xyz>.",
+                "violation": "{\"violation\":\"no\"}"
+            } 
+        ],
+        "id": "r9",
+        "name": "open-ended clauses"
+    },
+    {
+        "definition": "Avoid the use of the word \"not\".",
+        "elaboration": "The presence of the word “not” in a need statement or requirement statement implies “not ever”, which is impossible to verify in a finite time, in which case, the need statement or requirement statement is not correct (C8). In theory, there is a large number of actions the system should not do. Such statements should be re-written in the positive—that is, referring to what the entity is to do, rather than what it is not to do. Rewriting the need statement or requirement statement to avoid the use of “not” results in a need or statement requirement statement that is clearer and is verifiable/validatable (C7).",
+        "examples": [
+            {
+                "requirement": "The <SOI> shall not fail.",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "The <SOI> shall have an Availability of greater than or equal to 95%.",
+                "violation": "{\"violation\":\"no\"}"
+            } 
+        ],
+        "exceptions": "It may be reasonable to include “not” in a requirement when the logical “NOT” is implied—for example when using not [X or Y]. In that case, however, in accordance with R15, it may be better to capitalize the “NOT” to make the logical condition explicit: NOT [X or Y]. There may be other cases such as “The <SOI> shall not be red in color.”, which is stating a constraint and is verifiable, as long as the range of shades of red is stated (RBG rr,bb,gg range or a “name” of red in some standard). The key consideration is verification. If the “not” can be unambiguously verified, then its use is acceptable.",
+        "id": "r16",
+        "name": "use of \"not\""
+    },
+    {
+        "definition": "Write a single sentence that contains a single thought conditioned and qualified by relevant sub-clauses.",
+        "elaboration": "Need statements and requirement statements must contain a single thought allowing needs to be traced to their source, the single thought within a requirement statement to be allocated, the resulting single-thought child requirements to trace to their allocated parent, requirements to trace to a single-thought source, and design and system validation and verification against the single-thought need or requirement. Sometimes a need statement or requirement statement is only applicable under a specific trigger, condition, or multiple conditions. If multiple actions are needed for a single condition, each action should be repeated in the text of a separate need statement or requirement statement along with the triggering condition, rather than stating the condition and then listing the multiple actions to be taken. Using this convention, the system can be verified to perform each action, and each action can be separately allocated to the entities at the next level of the architecture. Also, avoid stating the condition or trigger for an action in a separate sentence. Instead, write a simple affirmative declarative sentence with a single subject, a single main action verb, and a single object, framed and qualified by one or more sub-clauses. Avoid compound sentences containing more than one subject/verb/object sequence. This constraint is enforced in the catalog of agreed patterns (see R1 and Appendix C). Often when there are multiple sentences for one requirement, the writer is using the second sentence to communicate the conditions for use or rationale for the requirement for the first sentence. This practice is not acceptable—rather include rationale in the attribute A1 - Rationale as part of the requirement expression and include the condition of use within the need statement or requirement statement or an attribute within the need or requirement expression.",
+        "examples": [
+            {
+                "requirement": "When in the Active_State, the Record_Subsystem shall display the Name of each Line_Item and shall record the Location of each Line_Item, without obscuring the User_ID. ",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "When in the Active_State, the Record_Subsystem shall display per <Display Standard XYZ> the Name of each Line_Item, without obscuring the User_ID.",
+                "violation": "{\"violation\":\"no\"}"
+            },
+            {
+                "requirement": "The Control_Subsystem will close the Inlet_Valve until the temperature has reduced to 85 °C, when it will then reopen it in less than 1 second. ",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "If the Water_Temperature in the Boiler increases to greater than 85 °C, the Control_Subsystem shall close the Inlet_Valve in less than 1 second.",
+                "violation": "{\"violation\":\"no\"}"
+            } 
+        ],
+        "exceptions": "However, additional sub-clauses with auxiliary verbs or adverbs may be used to qualify the requirement with performance attributes. Such sub-clauses cannot be verified in isolation since they are incomprehensible without the main clause. Sub-clauses that need to be verified separately from others should be expressed as separate requirements. For example, 'The Ambulance_Control_System shall communicate Incident_Details to the Driver' is a complete, comprehensible statement with a single main verb. An auxiliary clause may be added to provide a qualifying constraint, such as 'The Ambulance_Control_System shall communicate Incident_Details to the Driver, while simultaneously maintaining communication with the Caller.' [Note: the verb 'communicate' is more appropriate for a need statement. The resulting Design Input Requirements would address the specific means of communication.] Similarly, if the requirement is to extinguish and dispose of a match as a single combined action, the requirement must ensure that both are verified at the same time and allocated the same. Note that if performance attributes need to be verified separately, they should be expressed as sub-clauses in separate requirements.",
+        "id": "r18",
+        "name": "single thought sentence"
+    },
+    {
+        "definition": "Express each need and requirement once and only once.",
+        "elaboration": "Avoid including the same or equivalent need and requirement more than once, either as a duplicate or in similar form. Exact duplicates are relatively straightforward to identify; finding similar need or requirement statements with slightly different wording is much more difficult but is aided by the consistent use of defined terms (R4) and by classification (R29), as well as the use of a properly defined project data dictionary, ontology or glossary in which synonymies and equivalences between terms and acronyms can be defined. NLP/AI tools can help in the identification of duplicates or similar needs or requirements. In any case, when following the agreed patterns for statement (R1) and a data dictionary, the detection of duplicates and similar results far easier. Avoidance of duplication can be aided by classification (R29) so a subset of needs or requirements can be compared.",
+        "examples": [],
+        "id": "r30",
+        "name": "unique expression"
+    },
+    {
+        "definition": "Avoid stating implementation in a need statement or requirement statement unless there is rationale for constraining the design.",
+        "elaboration": "TODO",
+        "examples": [
+            {
+                "requirement": "Traffic lights shall be used to control traffic at the intersection.",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "When a Pedestrian signals an intent to cross the street at the Intersection, the Traffic_Control_System shall provide [the Pedestrian a “Walk” signal AND provide the traffic a “Stop” signal].",
+                "violation": "{\"violation\":\"no\"}"
+            },
+            {
+                "requirement": "When a pedestrian signals his presence by pressing a button on the traffic-light pillar, the traffic light shall turn red for the traffic to stop. ",
+                "violation": "{\"violation\":\"yes\"}"
+            },
+            {
+                "requirement": "When the presence of a Pedestrian that needs to cross the street at the Intersection during Day_Light_Hours is detected, the Traffic_Control_System shall issue a Traffic_Stop_Signal for Average_Pedestrian_Crossing_Time. ",
+                "violation": "{\"violation\":\"no\"}"
+            } 
+        ],
+        "id": "r31",
+        "name": "solution free"
+    }
+]

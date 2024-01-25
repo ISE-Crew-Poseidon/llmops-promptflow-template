@@ -13,10 +13,8 @@ deployment environment (dev, test, prod).
 
 import argparse
 import json
-from azure.ai.ml import MLClient
 
-from azure.identity import DefaultAzureCredential
-
+from llmops.common.utils.get_clients import get_ml_client
 from llmops.common.logger import llmops_logger
 logger = llmops_logger("test_model_on_kubernetes")
 
@@ -60,12 +58,7 @@ resource_group_name = config["RESOURCE_GROUP_NAME"]
 workspace_name = config["WORKSPACE_NAME"]
 real_config = f"{flow_to_execute}/configs/deployment_config.json"
 
-ml_client = MLClient(
-    DefaultAzureCredential(),
-    args.subscription_id,
-    resource_group_name,
-    workspace_name
-)
+ml_client = get_ml_client(args.subscription_id, resource_group_name, workspace_name)
 
 config_file = open(real_config)
 endpoint_config = json.load(config_file)

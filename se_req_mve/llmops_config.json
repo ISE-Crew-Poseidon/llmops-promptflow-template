@@ -1,0 +1,30 @@
+{
+    "envs":[
+            {
+                "ENV_NAME": "pr",
+                "RUNTIME_NAME": "mc-runtime",
+                "KEYVAULT_NAME": "ngcengreqsmve",
+                "RESOURCE_GROUP_NAME": "ngc-eng-reqs-mve",
+                "WORKSPACE_NAME": "ngcengreqsmve",
+                "STANDARD_FLOW_PATH": "models/experiment_flow",
+                "EVALUATION_FLOW_PATH": "flows/evaluation"
+            },
+            {
+                "ENV_NAME": "dev",
+                "RUNTIME_NAME": "mc-runtime",
+                "KEYVAULT_NAME": "ngcengreqsmve",
+                "RESOURCE_GROUP_NAME": "ngc-eng-reqs-mve",
+                "WORKSPACE_NAME": "ngcengreqsmve",
+                "STANDARD_FLOW_PATH": "models/experiment_flow",
+                "EVALUATION_FLOW_PATH": "flows/evaluation"
+            },
+            {
+                "ENV_NAME": "postprodeval",
+                "RUNTIME_NAME": "mc-runtime",
+                "KEYVAULT_NAME": "ngcengreqsmve",
+                "RESOURCE_GROUP_NAME": "vnngc-eng-reqs-mveettest",
+                "WORKSPACE_NAME": "ngcengreqsmve",
+                "STANDARD_FLOW_PATH": "models/experiment_flow"
+            }
+    ]
+}

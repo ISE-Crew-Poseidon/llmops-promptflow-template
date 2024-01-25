@@ -31,10 +31,8 @@ import os
 import time
 import yaml
 import pandas as pd
-from azure.identity import DefaultAzureCredential
-from azure.ai.ml import MLClient
 from promptflow.entities import Run
-from promptflow.azure import PFClient
+from llmops.common.utils.get_clients import get_ml_client, get_pf_client
 
 from llmops.common.logger import llmops_logger
 
@@ -97,19 +95,10 @@ def prepare_and_execute(
     runtime = config["RUNTIME_NAME"]
     experiment_name = f"{flow_to_execute}_{stage}"
 
-    ml_client = MLClient(
-        DefaultAzureCredential(),
-        subscription_id,
-        resource_group_name,
-        workspace_name
-    )
+    ml_client = get_ml_client(subscription_id, resource_group_name, workspace_name)
 
-    pf = PFClient(
-        DefaultAzureCredential(),
-        subscription_id,
-        resource_group_name,
-        workspace_name
-    )
+    pf = get_pf_client(subscription_id, resource_group_name, workspace_name)
+
     logger.info(data_mapping_config)
     flow = f"{flow_to_execute}/{standard_flow_path}"
     dataset_name = []
@@ -224,6 +213,7 @@ def prepare_and_execute(
                         run_ids.append(pipeline_job.name)
                         df_result = None
                         time.sleep(15)
+                        
                         if (
                             pipeline_job.status == "Completed"
                             or pipeline_job.status == "Finished"
@@ -266,7 +256,7 @@ def prepare_and_execute(
             run_ids.append(pipeline_job.name)
             time.sleep(15)
             df_result = None
-
+    
             if (pipeline_job.status == "Completed" or
                     pipeline_job.status == "Finished"):
 

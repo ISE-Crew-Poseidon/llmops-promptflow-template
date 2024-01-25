@@ -1,0 +1,16 @@
+[
+    {
+        "id": "r18",
+        "name": "single thought sentence",
+        "definition": "Write a single sentence that contains a single thought conditioned and qualified by relevant subclauses",
+        "elaboration": "TODO",
+        "examples": "TODO"
+    },
+    {
+        "id": "r16",
+        "name": "use of \"not\"",
+        "definition": "Avoid the use of the word \"not\".",
+        "elaboration": "TODO",
+        "examples": "TODO"
+    }
+]
