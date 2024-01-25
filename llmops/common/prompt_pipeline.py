@@ -169,73 +169,73 @@ def prepare_and_execute(
                         get_current_defaults["dataset"] = data_ref
                         logger.info(get_current_defaults)
 
-                        if (
-                            len(past_runs) == 0
-                            or are_dictionaries_similar(
-                                get_current_defaults,
-                                past_runs
-                                )
-                            is False
-                        ):
-                            past_runs.append(get_current_defaults)
-                            timestamp = datetime.datetime.now().strftime(
-                                "%Y%m%d_%H%M%S"
-                                )
-                            
-                            run = Run(
-                                flow=flow,
-                                data=data_id,
-                                runtime=runtime,
-                                # un-comment the resources line and
-                                # comment the argument runtime to
-                                # enable automatic runtime.
-                                # Reference: COMPUTE_RUNTIME
-                                # resources={"instance_type": "Standard_E4ds_v4"},
-                                variant=variant_string,
-                                name=(
-                                    f"{experiment_name}_{variant_id}"
-                                    f"_{rule}"
-                                    f"_{timestamp}_{data_ref}"
-                                    ),
-                                display_name=(
-                                    f"{experiment_name}_{variant_id}"
-                                    f"_{rule}"
-                                    f"_{timestamp}_{data_ref}"
+                        # if (
+                        #     len(past_runs) == 0
+                        #     or are_dictionaries_similar(
+                        #         get_current_defaults,
+                        #         past_runs
+                        #         )
+                        #     is False
+                        # ):
+                        past_runs.append(get_current_defaults)
+                        timestamp = datetime.datetime.now().strftime(
+                            "%Y%m%d_%H%M%S"
+                            )
+                        
+                        run = Run(
+                            flow=flow,
+                            data=data_id,
+                            runtime=runtime,
+                            # un-comment the resources line and
+                            # comment the argument runtime to
+                            # enable automatic runtime.
+                            # Reference: COMPUTE_RUNTIME
+                            # resources={"instance_type": "Standard_E4ds_v4"},
+                            variant=variant_string,
+                            name=(
+                                f"{experiment_name}_{variant_id}"
+                                f"_{rule}"
+                                f"_{timestamp}_{data_ref}"
                                 ),
-                                environment_variables={
-                                    "key1": "value1"
-                                    },
-                                column_mapping=exp_config_node,
-                                tags={
-                                    "build_id": build_id
-                                    },
+                            display_name=(
+                                f"{experiment_name}_{variant_id}"
+                                f"_{rule}"
+                                f"_{timestamp}_{data_ref}"
+                            ),
+                            environment_variables={
+                                "key1": "value1"
+                                },
+                            column_mapping=exp_config_node,
+                            tags={
+                                "build_id": build_id
+                                },
+                        )
+
+                        pipeline_job = pf.runs.create_or_update(
+                            run,
+                            stream=True
                             )
 
-                            pipeline_job = pf.runs.create_or_update(
-                                run,
-                                stream=True
-                                )
-
-                            run_ids.append(pipeline_job.name)
-                            df_result = None
-                            time.sleep(15)
-                            
-                            if (
-                                pipeline_job.status == "Completed"
-                                or pipeline_job.status == "Finished"
-                            ):
-                                logger.info("job completed")
-                                df_result = pf.get_details(pipeline_job)
-                                if save_output:
-                                    dataframes.append(df_result)
-                                if save_metric:
-                                    metric_variant = pf.get_metrics(pipeline_job)
-                                    metric_variant[variant_id] = variant_string
-                                    metric_variant["dataset"] = data_id
-                                    metrics.append(metric_variant)
-                                logger.info(df_result.head(10))
-                            else:
-                                raise Exception("Sorry, job failured..")
+                        run_ids.append(pipeline_job.name)
+                        df_result = None
+                        time.sleep(15)
+                        
+                        if (
+                            pipeline_job.status == "Completed"
+                            or pipeline_job.status == "Finished"
+                        ):
+                            logger.info("job completed")
+                            df_result = pf.get_details(pipeline_job)
+                            if save_output:
+                                dataframes.append(df_result)
+                            if save_metric:
+                                metric_variant = pf.get_metrics(pipeline_job)
+                                metric_variant[variant_id] = variant_string
+                                metric_variant["dataset"] = data_id
+                                metrics.append(metric_variant)
+                            logger.info(df_result.head(10))
+                        else:
+                            raise Exception("Sorry, job failured..")
             else:
                 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
                 run = Run(
