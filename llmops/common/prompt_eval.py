@@ -123,7 +123,7 @@ def prepare_and_execute(
         for rule in rules:
             for flow_run in run_ids:
                 my_run = pf.runs.get(flow_run)
-                if my_run._experiment_name.__contains__(rule):
+                if my_run.name.__contains__(rule):
                     mapping_node["truth"] = f"${{data.{rule}}}"
                     run_data_id = my_run.data.replace("azureml:", "")
                     run_data_id = run_data_id.split(":")[0]
@@ -135,7 +135,20 @@ def prepare_and_execute(
                             break
 
                     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-
+                    if (
+                            my_run.properties.get(
+                                "azureml.promptflow.node_variant",
+                                None) is not None
+                        ):
+                            variant_id = \
+                                my_run.properties["azureml.promptflow.node_variant"]
+                            start_index = variant_id.find("{") + 1
+                            end_index = variant_id.find("}")
+                            variant_value = \
+                                variant_id[start_index:end_index].split(".")
+                            name = f"{experiment_name}_{variant_value[1]}_{rule}_eval_{timestamp}"
+                    else:
+                        name = f"{experiment_name}_{rule}_eval_{timestamp}"
                     eval_run = Run(
                         flow=flow.strip(),
                         data=data_id,
@@ -147,8 +160,8 @@ def prepare_and_execute(
                         # enable automatic runtime.
                         # Reference: COMPUTE_RUNTIME
                         # resources={"instance_type": "Standard_E4ds_v4"},
-                        name=f"{experiment_name}_{rule}_eval_{timestamp}",
-                        display_name=f"{experiment_name}_{rule}_eval_{timestamp}",
+                        name=name,
+                        display_name=name,
                         tags={"build_id": build_id},
                     )
                     eval_run._experiment_name = experiment_name
