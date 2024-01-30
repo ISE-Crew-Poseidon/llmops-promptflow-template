@@ -142,7 +142,7 @@ jobs:
             --env_name ${{ inputs.env_name }} \
             --data_purpose "test_data" \
             --run_id "$RUN_NAME" \
-            --rules r3,r7,r8,r9,r16,r18,r30,r31
+            --rules ${{ inputs.rule_ids }}
 
       #=====================================
       # Published generated reports in csv and html format
