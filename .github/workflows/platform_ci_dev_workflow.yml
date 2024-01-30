@@ -91,7 +91,7 @@ jobs:
             --env_name ${{ inputs.env_name }} \
             --data_purpose "training_data" \
             --output_file run_id.txt \
-            --rules {{ inputs.rule_ids }}
+            --rules ${{ inputs.rule_ids }}
 
       #=====================================
       # Reads run_id.txt file. Assigns it to variable RUN_NAME
