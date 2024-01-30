@@ -57,8 +57,8 @@ jobs:
         shell: bash
         run: |
           echo "[PWD]: $(pwd)"
-          echo "[LS]: $(ls -al)"
-          export rule_ids=$(cat ${GITHUB_WORKSPACE}/se_req_mve/models/experiment_flow/incose_rules.json | jq -r '. | map(.id) | join(",")' )
+          echo "[LS]: $(ls -al ..)"
+          export rule_ids=$(cat ${GITHUB_WORKSPACE}/../se_req_mve/models/experiment_flow/incose_rules.json | jq -r '. | map(.id) | join(",")' )
           echo "RULE_IDS=$rule_ids" >> $GITHUB_OUTPUT
 
   execute-platform-flow-ci:
