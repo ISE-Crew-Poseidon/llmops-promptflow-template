@@ -31,6 +31,6 @@ jobs:
     with:
       env_name: ${{ inputs.env_name || 'pr'}}
       flow_type: ${{ inputs.flow_type || 'se_req_mve' }}
-      rule_ids: "" # r3,r7,r8,r9,r16,r18,r30,r31
+      rule_ids: "default" # r3,r7,r8,r9,r16,r18,r30,r31
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}

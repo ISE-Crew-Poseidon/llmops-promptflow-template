@@ -15,7 +15,7 @@ on:
         type: string
         description: "Comma separated list of rule ids to execute. Only for MVE model"
         required: false
-        default: ""
+        default: "default"
     secrets:
       azure_credentials:
         description: "service principal auth to Azure"
