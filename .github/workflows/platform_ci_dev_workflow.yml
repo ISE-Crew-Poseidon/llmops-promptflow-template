@@ -157,13 +157,14 @@ jobs:
   #=====================================
   # Execute platform_cd_dev_workflow flow for deployment of flows
   #=====================================
-  deploy-flow:
-    uses: ./.github/workflows/platform_cd_dev_workflow.yml
-    needs: flow-experiment-and_evaluation
-    with:
-      env_name: ${{ inputs.env_name }}
-      flow_type: ${{ inputs.flow_type }} 
-      is_kubernetes_deployment: ${{ inputs.is_kubernetes_deployment }}
-    secrets:
-      azure_credentials: ${{ secrets.azure_credentials }}  
+  # Commenting out the deployment flow until it can be tested
+  # deploy-flow:
+  #   uses: ./.github/workflows/platform_cd_dev_workflow.yml
+  #   needs: flow-experiment-and_evaluation
+  #   with:
+  #     env_name: ${{ inputs.env_name }}
+  #     flow_type: ${{ inputs.flow_type }} 
+  #     is_kubernetes_deployment: ${{ inputs.is_kubernetes_deployment }}
+  #   secrets:
+  #     azure_credentials: ${{ secrets.azure_credentials }}  
 
