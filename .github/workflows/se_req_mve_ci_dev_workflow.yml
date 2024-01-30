@@ -49,6 +49,8 @@ jobs:
   create-rule-id-list:
     name: prompt flow experiment and evaluation job
     runs-on: ubuntu-latest
+    outputs:
+      RULE_IDS: ${{ steps.rule_ids.outputs.RULE_IDS }}
     steps:
       - name: generate list of rule ids
         id: rule_ids
@@ -59,10 +61,9 @@ jobs:
 
   execute-platform-flow-ci:
     uses: ./.github/workflows/platform_ci_dev_workflow.yml
+    needs: create-rule-id-list
     with:
       env_name: ${{ inputs.env_name || 'dev'}}
       flow_type: ${{ inputs.flow_type || 'se_req_mve' }}
       is_kubernetes_deployment: ${{ inputs.is_kubernetes_deployment|| 'False' }}
-      rule_ids: "${{ steps.rule_ids.outputs.RULE_IDS }}"
-    secrets:
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      rule_ids: "${{ needs.create-rule-id-list.outputs.RULE_IDS }}"
