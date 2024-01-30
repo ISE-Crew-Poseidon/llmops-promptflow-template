@@ -32,11 +32,13 @@ jobs:
       outputs:
         RULE_IDS: ${{ steps.rule_ids.outputs.RULE_IDS }}
       steps:
+        - name: Checkout Actions
+          uses: actions/checkout@v4
         - name: generate list of rule ids
           id: rule_ids
           shell: bash
           run: |
-            export rule_ids=$(cat ./se_req_mve/models/experiment_flow/incose_rules.json | jq -r '. | map(.id) | join(",")' )
+            export rule_ids=$(cat se_req_mve/models/experiment_flow/incose_rules.json | jq -r '. | map(.id) | join(",")' )
             echo "RULE_IDS=$rule_ids" >> $GITHUB_OUTPUT
 
   execute-platform-pr-workflow:
