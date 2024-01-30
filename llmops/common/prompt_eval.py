@@ -120,11 +120,14 @@ def prepare_and_execute(
 
         flow_name = (flow.split("/")[-1]).strip()
         mapping_node = eval_config_node[flow_name]
+        if len(rules) == 0:
+            rules = ["default"]
         for rule in rules:
             for flow_run in run_ids:
                 my_run = pf.runs.get(flow_run)
                 if my_run.name.__contains__(rule):
-                    mapping_node["truth"] = f"${{data.{rule}}}"
+                    if rule != "default":
+                        mapping_node["truth"] = f"${{data.{rule}}}"
                     run_data_id = my_run.data.replace("azureml:", "")
                     run_data_id = run_data_id.split(":")[0]
                     for data_item in dataset_name:

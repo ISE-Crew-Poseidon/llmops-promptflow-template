@@ -17,6 +17,11 @@ on:
         type: string
         description: "Determine managed(False) or kubernetes(True) deployment"
         required: true
+      rule_ids:
+        type: string
+        description: "Comma separated list of rule ids to execute. Only for MVE model"
+        required: false
+        default: ""
     secrets:
       azure_credentials:
         description: "service principal authentication to Azure"
@@ -86,7 +91,7 @@ jobs:
             --env_name ${{ inputs.env_name }} \
             --data_purpose "training_data" \
             --output_file run_id.txt \
-            --rules r3,r7,r8,r9,r16,r18,r30,r31
+            --rules {{ inputs.rule_ids }}
 
       #=====================================
       # Reads run_id.txt file. Assigns it to variable RUN_NAME

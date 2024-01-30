@@ -52,5 +52,6 @@ jobs:
       env_name: ${{ inputs.env_name || 'dev'}}
       flow_type: ${{ inputs.flow_type || 'se_req_mve' }}
       is_kubernetes_deployment: ${{ inputs.is_kubernetes_deployment|| 'False' }}
+      rule_ids: ""
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}

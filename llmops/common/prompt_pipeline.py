@@ -151,9 +151,13 @@ def prepare_and_execute(
         data_ref = data_ref.split(":")[0]
         dataframes = []
         metrics = []
+        if len(rules) == 0:
+            rules = ["default"]
         for rule in rules:
-            exp_config_node["rule_id"] = rule
-            exp_config_node["truth"] = f"${{data.{rule}}}"
+            if(rule != "default"):
+                # If real rules are passed, update the configs
+                exp_config_node["rule_id"] = rule
+                exp_config_node["truth"] = f"${{data.{rule}}}"
             if len(all_variants) != 0:
                 for variant in all_variants:
                     for variant_id, node_id in variant.items():
