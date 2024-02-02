@@ -173,14 +173,7 @@ def prepare_and_execute(
                         get_current_defaults["dataset"] = data_ref
                         logger.info(get_current_defaults)
 
-                        # if (
-                        #     len(past_runs) == 0
-                        #     or are_dictionaries_similar(
-                        #         get_current_defaults,
-                        #         past_runs
-                        #         )
-                        #     is False
-                        # ):
+                    
                         past_runs.append(get_current_defaults)
                         timestamp = datetime.datetime.now().strftime(
                             "%Y%m%d_%H%M%S"
@@ -206,9 +199,6 @@ def prepare_and_execute(
                                 f"_{rule}"
                                 f"_{timestamp}_{data_ref}"
                             ),
-                            environment_variables={
-                                "key1": "value1"
-                                },
                             column_mapping=exp_config_node,
                             tags={
                                 "build_id": build_id
@@ -253,9 +243,6 @@ def prepare_and_execute(
                     # resources={"instance_type": "Standard_E4ds_v4"},
                     name=f"{experiment_name}_{rule}_{timestamp}_{data_ref}",
                     display_name=f"{experiment_name}_{rule}_{timestamp}_{data_ref}",
-                    environment_variables={
-                        "key1": "value1"
-                        },
                     column_mapping=exp_config_node,
                     tags={
                         "build_id": build_id

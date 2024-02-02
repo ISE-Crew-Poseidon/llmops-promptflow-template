@@ -38,7 +38,7 @@ def prepare_and_execute(
     run_id,
     data_purpose,
     flow_to_execute,
-    rules=["r3", "r7", "r8", "r9", "r16", "r18", "r30", "r31"], # Used to send a list of rules to run 
+    rules, 
 ):
     """
     Run the evaluation loop by executing evaluation flows.

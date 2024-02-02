@@ -21,5 +21,5 @@ def convert_to_dict(input_str: str) -> dict:
         return response
 
     except Exception as e:
-        print("The input is not valid, error: {}".format(e))
+        logger.error("The input is not valid, error: {}".format(e))
         return {"violation": None, "reason": "Failed to parse LLM output."}
