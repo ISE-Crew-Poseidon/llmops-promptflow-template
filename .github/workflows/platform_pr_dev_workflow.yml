@@ -11,6 +11,11 @@ on:
         type: string
         description: "The flow use-case to execute"
         required: true
+      rule_ids:
+        type: string
+        description: "Comma separated list of rule ids to execute. Only for MVE model"
+        required: false
+        default: "default"
     secrets:
       azure_credentials:
         description: "service principal auth to Azure"
@@ -82,7 +87,8 @@ jobs:
             --flow_to_execute ${{ inputs.flow_type }} \
             --env_name ${{ inputs.env_name }} \
             --data_purpose "pr_data" \
-            --output_file run_id.txt
+            --output_file run_id.txt \
+            --rules ${{ inputs.rule_ids }}
             
 
 

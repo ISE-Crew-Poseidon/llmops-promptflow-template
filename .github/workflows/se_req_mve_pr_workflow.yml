@@ -31,5 +31,6 @@ jobs:
     with:
       env_name: ${{ inputs.env_name || 'pr'}}
       flow_type: ${{ inputs.flow_type || 'se_req_mve' }}
+      rule_ids: "r3" # Run only one rule for PRs
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}

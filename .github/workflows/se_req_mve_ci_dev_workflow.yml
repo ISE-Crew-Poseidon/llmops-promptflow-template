@@ -46,11 +46,28 @@ on:
 # Execute platform_ci_dev_workflow workflow for experiment, evaluation and deployment of flows
 #=====================================
 jobs:
+  create-rule-id-list:
+    name: prompt flow experiment and evaluation job
+    runs-on: ubuntu-latest
+    outputs:
+      RULE_IDS: ${{ steps.rule_ids.outputs.RULE_IDS }}
+    steps:
+      - name: Checkout Actions
+        uses: actions/checkout@v4
+      - name: generate list of rule ids
+        id: rule_ids
+        shell: bash
+        run: |
+          export rule_ids=$(cat se_req_mve/models/experiment_flow/incose_rules.json | jq -r '. | map(.id) | join(",")' )
+          echo "RULE_IDS=$rule_ids" >> $GITHUB_OUTPUT
+
   execute-platform-flow-ci:
     uses: ./.github/workflows/platform_ci_dev_workflow.yml
+    needs: create-rule-id-list
     with:
       env_name: ${{ inputs.env_name || 'dev'}}
       flow_type: ${{ inputs.flow_type || 'se_req_mve' }}
       is_kubernetes_deployment: ${{ inputs.is_kubernetes_deployment|| 'False' }}
+      rule_ids: "${{ needs.create-rule-id-list.outputs.RULE_IDS }}"
     secrets:
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}

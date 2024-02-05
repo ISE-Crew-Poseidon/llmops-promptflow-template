@@ -17,6 +17,11 @@ on:
         type: string
         description: "Determine managed(False) or kubernetes(True) deployment"
         required: true
+      rule_ids:
+        type: string
+        description: "Comma separated list of rule ids to execute. Only for MVE model"
+        required: false
+        default: "default"
     secrets:
       azure_credentials:
         description: "service principal authentication to Azure"
@@ -85,7 +90,8 @@ jobs:
             --flow_to_execute ${{ inputs.flow_type }} \
             --env_name ${{ inputs.env_name }} \
             --data_purpose "training_data" \
-            --output_file run_id.txt
+            --output_file run_id.txt \
+            --rules ${{ inputs.rule_ids }}
 
       #=====================================
       # Reads run_id.txt file. Assigns it to variable RUN_NAME
@@ -135,7 +141,8 @@ jobs:
             --flow_to_execute ${{ inputs.flow_type }} \
             --env_name ${{ inputs.env_name }} \
             --data_purpose "test_data" \
-            --run_id "$RUN_NAME"
+            --run_id "$RUN_NAME" \
+            --rules ${{ inputs.rule_ids }}
 
       #=====================================
       # Published generated reports in csv and html format
@@ -150,13 +157,14 @@ jobs:
   #=====================================
   # Execute platform_cd_dev_workflow flow for deployment of flows
   #=====================================
-  deploy-flow:
-    uses: ./.github/workflows/platform_cd_dev_workflow.yml
-    needs: flow-experiment-and_evaluation
-    with:
-      env_name: ${{ inputs.env_name }}
-      flow_type: ${{ inputs.flow_type }} 
-      is_kubernetes_deployment: ${{ inputs.is_kubernetes_deployment }}
-    secrets:
-      azure_credentials: ${{ secrets.azure_credentials }}  
+  # Commenting out the deployment flow until it can be tested
+  # deploy-flow:
+  #   uses: ./.github/workflows/platform_cd_dev_workflow.yml
+  #   needs: flow-experiment-and_evaluation
+  #   with:
+  #     env_name: ${{ inputs.env_name }}
+  #     flow_type: ${{ inputs.flow_type }} 
+  #     is_kubernetes_deployment: ${{ inputs.is_kubernetes_deployment }}
+  #   secrets:
+  #     azure_credentials: ${{ secrets.azure_credentials }}  
 

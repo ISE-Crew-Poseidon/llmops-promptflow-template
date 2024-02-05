@@ -64,6 +64,7 @@ def prepare_and_execute(
     data_purpose,
     save_output,
     save_metric,
+    rules, # Used to send a list of rules to run 
 ):
     """
     Run the experimentation loop by executing standard flows.
@@ -100,6 +101,7 @@ def prepare_and_execute(
     pf = get_pf_client(subscription_id, resource_group_name, workspace_name)
 
     logger.info(data_mapping_config)
+    logger.info(rules)
     flow = f"{flow_to_execute}/{standard_flow_path}"
     dataset_name = []
     config_file = open(data_config_path)
@@ -149,56 +151,54 @@ def prepare_and_execute(
         data_ref = data_ref.split(":")[0]
         dataframes = []
         metrics = []
+        if len(rules) == 0:
+            rules = ["default"]
+        for rule in rules:
+            if(rule != "default"):
+                # If real rules are passed, update the configs
+                exp_config_node["rule_id"] = rule
+                exp_config_node["truth"] = f"${{data.{rule}}}"
+            if len(all_variants) != 0:
+                for variant in all_variants:
+                    for variant_id, node_id in variant.items():
+                        variant_string = f"${{{node_id}.{variant_id}}}"
+                        logger.info(variant_string)
 
-        if len(all_variants) != 0:
-            for variant in all_variants:
-                for variant_id, node_id in variant.items():
-                    variant_string = f"${{{node_id}.{variant_id}}}"
-                    logger.info(variant_string)
+                        get_current_defaults = {
+                            key: value
+                            for key, value in default_variants.items()
+                            if key != node_id or value != variant_id
+                        }
+                        get_current_defaults[node_id] = variant_id
+                        get_current_defaults["dataset"] = data_ref
+                        logger.info(get_current_defaults)
 
-                    get_current_defaults = {
-                        key: value
-                        for key, value in default_variants.items()
-                        if key != node_id or value != variant_id
-                    }
-                    get_current_defaults[node_id] = variant_id
-                    get_current_defaults["dataset"] = data_ref
-                    logger.info(get_current_defaults)
-
-                    if (
-                        len(past_runs) == 0
-                        or are_dictionaries_similar(
-                            get_current_defaults,
-                            past_runs
-                            )
-                        is False
-                    ):
+                    
                         past_runs.append(get_current_defaults)
                         timestamp = datetime.datetime.now().strftime(
                             "%Y%m%d_%H%M%S"
                             )
-
+                        
                         run = Run(
                             flow=flow,
                             data=data_id,
-                            # runtime=runtime,
+                            runtime=runtime,
                             # un-comment the resources line and
                             # comment the argument runtime to
                             # enable automatic runtime.
                             # Reference: COMPUTE_RUNTIME
-                            resources={"instance_type": "Standard_E4ds_v4"},
+                            # resources={"instance_type": "Standard_E4ds_v4"},
                             variant=variant_string,
                             name=(
                                 f"{experiment_name}_{variant_id}"
+                                f"_{rule}"
                                 f"_{timestamp}_{data_ref}"
                                 ),
                             display_name=(
                                 f"{experiment_name}_{variant_id}"
+                                f"_{rule}"
                                 f"_{timestamp}_{data_ref}"
                             ),
-                            environment_variables={
-                                "key1": "value1"
-                                },
                             column_mapping=exp_config_node,
                             tags={
                                 "build_id": build_id
@@ -230,47 +230,44 @@ def prepare_and_execute(
                             logger.info(df_result.head(10))
                         else:
                             raise Exception("Sorry, job failured..")
-        else:
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            run = Run(
-                flow=flow,
-                data=data_id,
-                # runtime=runtime,
-                # un-comment the resources line and
-                # comment the argument runtime to
-                # enable automatic runtime.
-                # Reference: COMPUTE_RUNTIME
-                resources={"instance_type": "Standard_E4ds_v4"},
-                name=f"{experiment_name}_{timestamp}_{data_ref}",
-                display_name=f"{experiment_name}_{timestamp}_{data_ref}",
-                environment_variables={
-                    "key1": "value1"
-                    },
-                column_mapping=exp_config_node,
-                tags={
-                    "build_id": build_id
-                    },
-            )
-            run._experiment_name = experiment_name
-            pipeline_job = pf.runs.create_or_update(run, stream=True)
-            run_ids.append(pipeline_job.name)
-            time.sleep(15)
-            df_result = None
-    
-            if (pipeline_job.status == "Completed" or
-                    pipeline_job.status == "Finished"):
-
-                logger.info("job completed")
-                df_result = pf.get_details(pipeline_job)
-                if save_output:
-                    dataframes.append(df_result)
-                if save_metric:
-                    metric_variant = pf.get_metrics(pipeline_job)
-                    metric_variant["dataset"] = data_id
-                    metrics.append(metric_variant)
-                logger.info(df_result.head(10))
             else:
-                raise Exception("Sorry, exiting job with failure..")
+                timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                run = Run(
+                    flow=flow,
+                    data=data_id,
+                    runtime=runtime,
+                    # un-comment the resources line and
+                    # comment the argument runtime to
+                    # enable automatic runtime.
+                    # Reference: COMPUTE_RUNTIME
+                    # resources={"instance_type": "Standard_E4ds_v4"},
+                    name=f"{experiment_name}_{rule}_{timestamp}_{data_ref}",
+                    display_name=f"{experiment_name}_{rule}_{timestamp}_{data_ref}",
+                    column_mapping=exp_config_node,
+                    tags={
+                        "build_id": build_id
+                        },
+                )
+                run._experiment_name = experiment_name
+                pipeline_job = pf.runs.create_or_update(run, stream=True)
+                run_ids.append(pipeline_job.name)
+                time.sleep(15)
+                df_result = None
+        
+                if (pipeline_job.status == "Completed" or
+                        pipeline_job.status == "Finished"):
+
+                    logger.info("job completed")
+                    df_result = pf.get_details(pipeline_job)
+                    if save_output:
+                        dataframes.append(df_result)
+                    if save_metric:
+                        metric_variant = pf.get_metrics(pipeline_job)
+                        metric_variant["dataset"] = data_id
+                        metrics.append(metric_variant)
+                    logger.info(df_result.head(10))
+                else:
+                    raise Exception("Sorry, exiting job with failure..")
 
         if (save_output or save_metric) and not os.path.exists("./reports"):
             os.makedirs("./reports")
@@ -334,6 +331,10 @@ def prepare_and_execute(
         logger.info("Saved the metrics in files in reports folder")
 
 
+# Define a custom argument type for a list of strings
+def list_of_strings(arg):
+    return arg.split(',')
+
 def main():
     """
     Run experimentation loop by executing standard Prompt Flows.
@@ -390,6 +391,12 @@ def main():
         required=False,
         action="store_true",
     )
+    parser.add_argument(
+        "--rules",
+        help="List of rules for MVE experiment",
+        required=False,
+        type=list_of_strings,
+    )
     args = parser.parse_args()
 
     prepare_and_execute(
@@ -401,6 +408,7 @@ def main():
         args.data_purpose,
         args.save_output,
         args.save_metric,
+        args.rules,
     )
 
 

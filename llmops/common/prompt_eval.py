@@ -37,7 +37,8 @@ def prepare_and_execute(
     build_id, stage,
     run_id,
     data_purpose,
-    flow_to_execute
+    flow_to_execute,
+    rules, 
 ):
     """
     Run the evaluation loop by executing evaluation flows.
@@ -119,80 +120,96 @@ def prepare_and_execute(
 
         flow_name = (flow.split("/")[-1]).strip()
         mapping_node = eval_config_node[flow_name]
-        for flow_run in run_ids:
-            my_run = pf.runs.get(flow_run)
-            run_data_id = my_run.data.replace("azureml:", "")
-            run_data_id = run_data_id.split(":")[0]
-            for data_item in dataset_name:
-                data_n = data_item["data_id"]
-                ref_data = data_item["ref_data"]
-                if ref_data == run_data_id:
-                    data_id = data_n
-                    break
+        if len(rules) == 0:
+            rules = ["default"]
+        for rule in rules:
+            for flow_run in run_ids:
+                my_run = pf.runs.get(flow_run)
+                if my_run.name.__contains__(rule):
+                    if rule != "default":
+                        mapping_node["truth"] = f"${{data.{rule}}}"
+                    run_data_id = my_run.data.replace("azureml:", "")
+                    run_data_id = run_data_id.split(":")[0]
+                    for data_item in dataset_name:
+                        data_n = data_item["data_id"]
+                        ref_data = data_item["ref_data"]
+                        if ref_data == run_data_id:
+                            data_id = data_n
+                            break
 
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    if (
+                            my_run.properties.get(
+                                "azureml.promptflow.node_variant",
+                                None) is not None
+                        ):
+                            variant_id = \
+                                my_run.properties["azureml.promptflow.node_variant"]
+                            start_index = variant_id.find("{") + 1
+                            end_index = variant_id.find("}")
+                            variant_value = \
+                                variant_id[start_index:end_index].split(".")
+                            name = f"{experiment_name}_{variant_value[1]}_{rule}_eval_{timestamp}"
+                    else:
+                        name = f"{experiment_name}_{rule}_eval_{timestamp}"
+                    eval_run = Run(
+                        flow=flow.strip(),
+                        data=data_id,
+                        run=my_run,
+                        column_mapping=mapping_node,
+                        runtime=runtime,
+                        # un-comment the resources line and
+                        # comment the argument runtime to
+                        # enable automatic runtime.
+                        # Reference: COMPUTE_RUNTIME
+                        # resources={"instance_type": "Standard_E4ds_v4"},
+                        name=name,
+                        display_name=name,
+                        tags={"build_id": build_id},
+                    )
+                    eval_run._experiment_name = experiment_name
+                    eval_job = pf.runs.create_or_update(eval_run, stream=True)
+                    df_result = None
 
-            eval_run = Run(
-                flow=flow.strip(),
-                data=data_id,
-                run=my_run,
-                column_mapping=mapping_node,
-                # runtime=runtime,
-                # un-comment the resources line and
-                # comment the argument runtime to
-                # enable automatic runtime.
-                # Reference: COMPUTE_RUNTIME
-                resources={"instance_type": "Standard_E4ds_v4"},
-                name=f"{experiment_name}_eval_{timestamp}",
-                display_name=f"{experiment_name}_eval_{timestamp}",
-                tags={"build_id": build_id},
-            )
-            eval_run._experiment_name = experiment_name
-            eval_job = pf.runs.create_or_update(eval_run, stream=True)
-            df_result = None
+                    time.sleep(15)
+                    if eval_job.status == "Completed" or eval_job.status == "Finished":
+                        logger.info(eval_job.status)
+                        df_result = pf.get_details(eval_job)
+                        metric_variant = pf.get_metrics(eval_job)
 
-            time.sleep(15)
-            if eval_job.status == "NotStarted":
-                logger.info("Job didn't start in time, retry once")
-                eval_job = pf.runs.create_or_update(eval_run, stream=True)
-            if eval_job.status == "Completed" or eval_job.status == "Finished":
-                logger.info(eval_job.status)
-                df_result = pf.get_details(eval_job)
-                metric_variant = pf.get_metrics(eval_job)
+                        if (
+                            my_run.properties.get(
+                                "azureml.promptflow.node_variant",
+                                None) is not None
+                        ):
+                            variant_id = \
+                                my_run.properties["azureml.promptflow.node_variant"]
+                            start_index = variant_id.find("{") + 1
+                            end_index = variant_id.find("}")
+                            variant_value = \
+                                variant_id[start_index:end_index].split(".")
 
-                if (
-                    my_run.properties.get(
-                        "azureml.promptflow.node_variant",
-                        None) is not None
-                ):
-                    variant_id = \
-                        my_run.properties["azureml.promptflow.node_variant"]
-                    start_index = variant_id.find("{") + 1
-                    end_index = variant_id.find("}")
-                    variant_value = \
-                        variant_id[start_index:end_index].split(".")
+                            df_result[variant_value[0]] = variant_value[1]
+                            metric_variant[variant_value[0]] = variant_value[1]
+                            df_result["dataset"] = data_id
+                            metric_variant["dataset"] = data_id
 
-                    df_result[variant_value[0]] = variant_value[1]
-                    metric_variant[variant_value[0]] = variant_value[1]
-                    df_result["dataset"] = data_id
-                    metric_variant["dataset"] = data_id
+                            for var in default_variants:
+                                for key in var.keys():
+                                    if key == variant_value[0]:
+                                        pass
+                                    else:
+                                        df_result[key] = var[key]
+                                        metric_variant[key] = var[key]
 
-                    for var in default_variants:
-                        for key in var.keys():
-                            if key == variant_value[0]:
-                                pass
-                            else:
-                                df_result[key] = var[key]
-                                metric_variant[key] = var[key]
+                        dataframes.append(df_result)
+                        metrics.append(metric_variant)
 
-                dataframes.append(df_result)
-                metrics.append(metric_variant)
+                        logger.info(json.dumps(metrics, indent=4))
+                        logger.info(df_result.head(10))
 
-                logger.info(json.dumps(metrics, indent=4))
-                logger.info(df_result.head(10))
-
-            else:
-                raise Exception("Sorry, exiting job with failure..")
+                    else:
+                        raise Exception("Sorry, exiting job with failure..")
 
         if not os.path.exists("./reports"):
             os.makedirs("./reports")
@@ -236,6 +253,9 @@ def prepare_and_execute(
     with open(f"reports/{experiment_name}_metrics.html", "w") as f_metrics:
         f_metrics.write(html_table_metrics)
 
+# Define a custom argument type for a list of strings
+def list_of_strings(arg):
+    return arg.split(',')
 
 def main():
     """
@@ -279,6 +299,12 @@ def main():
         "--flow_to_execute", type=str, help="flow use case name", required=True
     )
 
+    parser.add_argument(
+        "--rules",
+        help="List of rules for MVE experiment",
+        required=False,
+        type=list_of_strings,
+    )
     args = parser.parse_args()
 
     prepare_and_execute(
@@ -288,6 +314,7 @@ def main():
         args.run_id,
         args.data_purpose,
         args.flow_to_execute,
+        args.rules,
     )
 
 
